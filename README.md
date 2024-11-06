@@ -63,7 +63,7 @@ Use the following connection details:
         Hostname: 127.0.0.1
         Port: 3306
         Username: root
-        Password: rootpassword (or whatever you used in Step 2)
+        Password: root (or whatever you used in Step 2)
 
 Test the connection to ensure it's working properly.
 
