@@ -1,0 +1,70 @@
+ CREATE TABLE Account (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     username NVARCHAR(255) NOT NULL,
+     email NVARCHAR(255) NOT NULL,
+     password NVARCHAR(255) NOT NULL,
+     role ENUM('user', 'manager') NOT NULL,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     created_log NVARCHAR(255) DEFAULT 'Admin',
+     created_by NVARCHAR(255) DEFAULT 'Admin',
+     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     updated_log NVARCHAR(255) DEFAULT 'Admin',
+     updated_by NVARCHAR(255) DEFAULT 'Admin'
+ );
+
+
+
+ CREATE TABLE LectureHall (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     building NVARCHAR(255) NOT NULL,
+     floor NVARCHAR(255) NOT NULL,
+     room NVARCHAR(255) NOT NULL,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     created_log NVARCHAR(255) DEFAULT 'Admin',
+     created_by NVARCHAR(255) DEFAULT 'Admin',
+     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     updated_log NVARCHAR(255) DEFAULT 'Admin',
+     updated_by NVARCHAR(255) DEFAULT 'Admin'
+ );
+
+
+ CREATE TABLE Report (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     accountId INT NOT NULL,
+     time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     type NVARCHAR(255) NOT NULL,
+     LectureHallId INT NOT NULL,
+     details NVARCHAR(255) NOT NULL,
+     priority ENUM('low', 'medium', 'high') NOT NULL,
+     critical BOOL NOT NULL,
+     stage ENUM('open', 'in_progress', 'resolved') DEFAULT 'open',
+     assignedAccountId INT,  -- Can be NULL if not assigned
+     feedbackRatings INT DEFAULT 0,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     created_log NVARCHAR(255) DEFAULT 'Admin',
+     created_by NVARCHAR(255) DEFAULT 'Admin',
+     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     updated_log NVARCHAR(255) DEFAULT 'Admin',
+     updated_by NVARCHAR(255) DEFAULT 'Admin',
+     FOREIGN KEY (accountId) REFERENCES Account(id),
+     FOREIGN KEY (LectureHallId) REFERENCES LectureHall(id),
+     FOREIGN KEY (assignedAccountId) REFERENCES Account(id)
+ );
+
+
+ CREATE TABLE ReportNote (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     reportId INT NOT NULL,
+     time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     accountId INT NOT NULL,
+     name NVARCHAR(255) NOT NULL,
+     details NVARCHAR(255) NOT NULL,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     created_log NVARCHAR(255) DEFAULT 'Admin',
+     created_by NVARCHAR(255) DEFAULT 'Admin',
+     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     updated_log NVARCHAR(255) DEFAULT 'Admin',
+     updated_by NVARCHAR(255) DEFAULT 'Admin',
+     FOREIGN KEY (reportId) REFERENCES Report(id),
+     FOREIGN KEY (accountId) REFERENCES Account(id)
+ );
