@@ -1,0 +1,130 @@
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../node_modules/bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here
+// disable input focus outline
+$input-focus-box-shadow: none;
+$form-select-focus-box-shadow: none;
+
+$enable-shadows: false;
+
+$enable-gradients: true;
+
+$tooltip-max-width: 500px;
+
+// 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/variables-dark";
+
+// 4. Include any default map overrides here// Color mode variables in _root.scss
+
+$theme-colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "success": $success,
+    "info": $info,
+    "warning": $warning,
+    "danger": $danger,
+    "light": $light,
+    "dark": $dark,
+    "dark-subtle": $dark-bg-subtle,
+    "secondary-subtle": $secondary-bg-subtle,
+    "primary-subtle": $primary-bg-subtle
+);
+
+
+
+// 5. Import rest of bootstrap
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+:root,
+[data-bs-theme=light] {
+    --body-bg: #7e8891;
+    --gutter-bg: #6c757d;
+    --body-bg-whitelist: #F8F9FA;
+    --bg-listview: #F5F5F5;
+
+    .btn-close {
+        filter: none !important;
+    }
+}
+
+[data-bs-theme=dark] {
+    // --bs-body-bg: #1e1e2d;
+    // // --bs-page-bg: #0d0d11;
+    // --bs-dark-rgb: 31, 31, 45;
+    // --bs-border-color: #333436;
+    // --bs-body-bg-rgb: 24, 23, 35;
+    // --bs-light-bg-subtle: #151521;
+    // --bs-primary-bg-subtle: #1f3f6f;
+
+    --body-bg: var(--bs-light-bg-subtle);
+    --body-bg-whitelist: var(--bs-light-bg-subtle);
+    --gutter-bg: var(--bs-light-border-subtle);
+    --bg-listview: #343a40;
+
+    //Fix typeahead dark theme color bug
+    .rbt .rbt-input-hint {
+        color: rgba(148, 164, 177, 0.75) !important;
+    }
+
+    .btn-outline-secondary-subtle {
+        --bs-btn-color: #6c757d;
+        --bs-btn-border-color: #6c757d;
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg: #6c757d;
+        --bs-btn-hover-border-color: #6c757d;
+        --bs-btn-focus-shadow-rgb: 108, 117, 125;
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg: #6c757d;
+        --bs-btn-active-border-color: #6c757d;
+        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color: #6c757d;
+        --bs-btn-disabled-bg: transparent;
+        --bs-btn-disabled-border-color: #6c757d;
+    }
+}
+
+
+
+// React notifications
+@import '../node_modules/react-notifications-component/dist/scss/notification.scss';
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

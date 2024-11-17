@@ -1,0 +1,37 @@
+$color-cat: #FFCD11;
+
+.header-container {
+    --bs-gradient: none;
+
+    width: 3rem;
+
+    .nav-link {
+        border-left: solid 3px var(--bs-dark) !important;
+        transition: 150ms ease-in-out;
+        padding: 0.75rem 0;
+
+        &.active {
+            color: $color-cat !important;
+            background-color: var(--bs-black) !important;
+            border-color: $color-cat !important;
+        }
+
+        &:not(.active):hover {
+            color: $color-cat !important;
+            transition: 150ms ease-in-out;
+        }
+
+        .fa {
+            font-size: 20px;
+        }
+    }
+
+    .dropdown-item {
+        .fa {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.25rem;
+            text-align: center;
+        }
+    }
+}
