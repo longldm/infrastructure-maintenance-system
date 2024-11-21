@@ -2,10 +2,15 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.5'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id 'jacoco'
+	id 'com.diffplug.spotless' version '5.14.0'  // Spotless plugin
 }
 
 group = 'com.fixing'
 version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '21'
+targetCompatibility = '21'
+
 
 java {
 	toolchain {
@@ -26,8 +31,75 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.security:spring-security-crypto'
+	implementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.security:spring-security-test'
+
+	// MySQL runtime dependency
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// MapStruct
+	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+	// H2 Database for testing
+	testImplementation 'com.h2database:h2:2.2.224'
+
+	// Testcontainers
+	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'org.testcontainers:mysql'
+
+	// JSON Web Token (JWT) dependencies
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 }
 
-tasks.named('test') {
+dependencyManagement {
+	imports {
+		mavenBom 'org.testcontainers:testcontainers-bom:1.19.7'
+	}
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+	options.compilerArgs += [
+			'-Amapstruct.suppressGeneratorTimestamp=true',
+			'-Amapstruct.defaultComponentModel=spring',
+			'-Amapstruct.verbose=true'
+	]
+}
+
+tasks.test {
 	useJUnitPlatform()
 }
+
+jacoco {
+	toolVersion = '0.8.12'
+}
+
+//spotless {
+//	java {
+//		removeUnusedImports()
+//		toggleOffOn()
+//		trimTrailingWhitespace()
+//		endWithNewline()
+//		indentWithTabs(4)
+//		palantirJavaFormat()
+//		importOrder 'java', 'jakarta', 'org', 'com', 'com.diffplug'
+//	}
+//}
+
+// Configure Spring Boot plugin
+//bootJar {
+//	mainClassName = 'com.fixing.management.ManagementApplication' // Adjust if needed
+//}
