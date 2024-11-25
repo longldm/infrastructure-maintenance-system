@@ -13,7 +13,7 @@ public class Report {
 
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
-    private Account account;
+    private User account;
 
     @ManyToOne
     @JoinColumn(name = "lecture_hall_id", nullable = false)
@@ -71,7 +71,7 @@ public class Report {
     public Report() {
     }
 
-    public Report(Account account, LectureHall lectureHall, String details, Priority priority, Boolean critical) {
+    public Report(User account, LectureHall lectureHall, String details, Priority priority, Boolean critical) {
         this.account = account;
         this.lectureHall = lectureHall;
         this.details = details;
@@ -90,11 +90,11 @@ public class Report {
         this.id = id;
     }
 
-    public Account getAccount() {
+    public User getAccount() {
         return account;
     }
 
-    public void setAccount(Account account) {
+    public void setAccount(User account) {
         this.account = account;
     }
 

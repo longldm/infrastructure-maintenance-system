@@ -50,6 +50,21 @@ public class ApplicationInitConfig {
                         .description("User role")
                         .build());
 
+                roleRepository.save(Role.builder()
+                        .name(PredefinedRole.MANAGER_ROLE)
+                        .description("Manager role")
+                        .build());
+
+                roleRepository.save(Role.builder()
+                        .name(PredefinedRole.SUPERVISOR_ROLE)
+                        .description("Supervisor role")
+                        .build());
+
+                roleRepository.save(Role.builder()
+                        .name(PredefinedRole.REPORTER_ROLE)
+                        .description("Reporter role")
+                        .build());
+
                 Role adminRole = roleRepository.save(Role.builder()
                         .name(PredefinedRole.ADMIN_ROLE)
                         .description("Admin role")

@@ -18,7 +18,7 @@ public class ReportNote {
 
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
-    private Account account;
+    private User account;
 
     @Column(name = "name", nullable = false, length = 255)
     private String name;
@@ -50,7 +50,7 @@ public class ReportNote {
     public ReportNote() {
     }
 
-    public ReportNote(String name, String details, Report report, Account account) {
+    public ReportNote(String name, String details, Report report, User account) {
         this.name = name;
         this.details = details;
         this.report = report;
@@ -76,11 +76,11 @@ public class ReportNote {
         this.report = report;
     }
 
-    public Account getAccount() {
+    public User getAccount() {
         return account;
     }
 
-    public void setAccount(Account account) {
+    public void setAccount(User account) {
         this.account = account;
     }
 

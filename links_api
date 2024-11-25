@@ -1,0 +1,24 @@
+1. Login
+http://localhost:8080/identity/auth/token
+{
+    "username": "admin",
+    "password": "admin"
+}
+return token
+
+2. Test hello world api
+http://localhost:8080/identity/users/hello + Bearer Token
+
+3. Get users api
+http://localhost:8080/identity/users + Bearer Token
+
+POST: create user:
+{
+    "username": "manager1",
+    "password": "okokokok",
+    "firstName": "Duong",
+    "lastName": "Pham Thai",
+    "dob": "2002-05-08",
+    "role": "MANAGER"
+}
+

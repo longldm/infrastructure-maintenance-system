@@ -44,9 +44,28 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         HashSet<Role> roles = new HashSet<>();
-        roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
-
-        user.setRoles(roles);
+        switch (request.getRole()) {
+            case PredefinedRole.ADMIN_ROLE:
+                roleRepository.findById(PredefinedRole.ADMIN_ROLE).ifPresent(roles::add);
+                user.setRoles(roles);
+                break;
+            case PredefinedRole.USER_ROLE:
+                roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
+                user.setRoles(roles);
+                break;
+            case PredefinedRole.MANAGER_ROLE:
+                roleRepository.findById(PredefinedRole.MANAGER_ROLE).ifPresent(roles::add);
+                user.setRoles(roles);
+                break;
+            case PredefinedRole.SUPERVISOR_ROLE:
+                roleRepository.findById(PredefinedRole.SUPERVISOR_ROLE).ifPresent(roles::add);
+                user.setRoles(roles);
+                break;
+            case PredefinedRole.REPORTER_ROLE:
+                roleRepository.findById(PredefinedRole.REPORTER_ROLE).ifPresent(roles::add);
+                user.setRoles(roles);
+                break;
+        }
 
         try {
             user = userRepository.save(user);
