@@ -3,8 +3,16 @@ package com.fixing.management.entity;
 import com.fixing.management.exception.AppException;
 import com.fixing.management.exception.ErrorCode;
 import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 @Entity
 @Table(name = "report")
 public class Report {
@@ -34,6 +42,10 @@ public class Report {
     @Enumerated(EnumType.STRING)
     @Column(name = "stage", nullable = false, columnDefinition = "ENUM('OPEN', 'IN_PROGRESS', 'RESOLVED') DEFAULT 'OPEN'")
     private Stage stage = Stage.OPEN;
+
+    @OneToOne
+    @JoinColumn(name = "assigned_account_id", nullable = true)
+    private User assignedAccountId;
 
     @Column(name = "feedback_ratings", nullable = false, columnDefinition = "INT DEFAULT 0")
     private Integer feedbackRatings = 0;
@@ -76,121 +88,6 @@ public class Report {
         this.details = details;
         this.priority = priority;
         this.critical = critical;
-    }
-
-    // Getters and setters
-    // ...
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public User getAccount() {
-        return account;
-    }
-
-    public void setAccount(User account) {
-        this.account = account;
-    }
-
-    public LectureHall getLectureHall() {
-        return lectureHall;
-    }
-
-    public void setLectureHall(LectureHall lectureHall) {
-        this.lectureHall = lectureHall;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public Priority getPriority() {
-        return priority;
-    }
-
-    public void setPriority(Priority priority) {
-        this.priority = priority;
-    }
-
-    public Boolean getCritical() {
-        return critical;
-    }
-
-    public void setCritical(Boolean critical) {
-        this.critical = critical;
-    }
-
-    public Stage getStage() {
-        return stage;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
-    public Integer getFeedbackRatings() {
-        return feedbackRatings;
-    }
-
-    public void setFeedbackRatings(Integer feedbackRatings) {
-        this.feedbackRatings = feedbackRatings;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getCreatedLog() {
-        return createdLog;
-    }
-
-    public void setCreatedLog(String createdLog) {
-        this.createdLog = createdLog;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getUpdatedLog() {
-        return updatedLog;
-    }
-
-    public void setUpdatedLog(String updatedLog) {
-        this.updatedLog = updatedLog;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
     }
 }
 

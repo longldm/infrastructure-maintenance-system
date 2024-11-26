@@ -2,6 +2,7 @@ package com.fixing.management.controller;
 
 import com.fixing.management.dto.request.ApiResponse;
 import com.fixing.management.dto.request.ReportCreationRequest;
+import com.fixing.management.dto.request.ReportUpdateRequest;
 import com.fixing.management.dto.response.ReportResponse;
 import com.fixing.management.service.ReportService;
 import jakarta.validation.Valid;
@@ -40,6 +41,14 @@ public class ReportManagementController {
     ApiResponse<List<ReportResponse>> getReportByAccountId(@RequestParam String accountId) {
         return ApiResponse.<List<ReportResponse>>builder()
                 .result(reportService.getReportByAccountId(accountId))
+                .build();
+    }
+
+    // update report
+    @PutMapping("/assign-to")
+    ApiResponse<ReportResponse> updateReport( @RequestBody @Valid ReportUpdateRequest request) {
+        return ApiResponse.<ReportResponse>builder()
+                .result(reportService.updateReport(request))
                 .build();
     }
 }

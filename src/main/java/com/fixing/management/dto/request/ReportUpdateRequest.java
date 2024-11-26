@@ -2,7 +2,6 @@ package com.fixing.management.dto.request;
 
 import com.fixing.management.entity.LectureHall;
 import com.fixing.management.entity.Report;
-import com.fixing.management.entity.User;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,10 +11,8 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReportUpdateRequest {
-    private String accountId;
-    private LectureHall lectureHall;
-    private String details;
-    private Report.Priority priority;
-    private Boolean critical;
+    private int id;
+    private String reporterId;
+    private String assignedSupervisorId;
     private Report.Stage stage = Report.Stage.OPEN;
 }

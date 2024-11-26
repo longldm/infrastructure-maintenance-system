@@ -2,8 +2,6 @@ package com.fixing.management.dto.request;
 
 import com.fixing.management.entity.LectureHall;
 import com.fixing.management.entity.Report;
-import com.fixing.management.entity.User;
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReportCreationRequest {
-    private String accountId;
+    private String reporterId;
     private LectureHall lectureHall;
     private String details;
     private Report.Priority priority;

@@ -1,6 +1,7 @@
 package com.fixing.management.service;
 
 import com.fixing.management.dto.request.ReportCreationRequest;
+import com.fixing.management.dto.request.ReportUpdateRequest;
 import com.fixing.management.dto.response.ReportResponse;
 import com.fixing.management.entity.LectureHall;
 import com.fixing.management.entity.Report;
@@ -11,6 +12,7 @@ import com.fixing.management.mapper.ReportMapper;
 import com.fixing.management.repository.LectureHallRepository;
 import com.fixing.management.repository.ReportRepository;
 import com.fixing.management.repository.UserRepository;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,7 +33,7 @@ public class ReportService {
     LectureHallRepository lectureHallRepository;
 
     public ReportResponse createReport(ReportCreationRequest request) {
-        User user = userRepository.findById(request.getAccountId())
+        User user = userRepository.findById(request.getReporterId())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         LectureHall lectureHall = lectureHallRepository.findById(request.getLectureHall().getId())
@@ -66,5 +68,27 @@ public class ReportService {
         List<Report> reports = reportRepository.findByAccountId(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
         return reportMapper.toReportResponseList(reports);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ReportResponse updateReport(@Valid ReportUpdateRequest request) {
+        Report report = reportRepository.findById(request.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
+
+        User supervisor = userRepository.findById(request.getAssignedSupervisorId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        report.setAssignedAccountId(supervisor);
+        reportMapper.updateReport(report, request);
+
+        try {
+            reportRepository.save(report);
+            log.info("Report updated: {}" + report);
+        } catch (Exception e) {
+            log.error("Error updating report: {}" + e.getMessage());
+            throw e;
+        }
+
+        return reportMapper.toReportResponse(report);
     }
 }

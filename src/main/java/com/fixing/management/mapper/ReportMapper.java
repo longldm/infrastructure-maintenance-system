@@ -19,7 +19,8 @@ import java.util.List;
 public interface ReportMapper {
     Report toReport(ReportCreationRequest request);
 
-    @Mapping(source = "account.id", target = "accountId") // Map the account's ID to accountId
+    @Mapping(source = "account.id", target = "reporterId") // Map the account's ID to accountId
+    @Mapping(source = "assignedAccountId.id", target = "assignedSupervisorId") // Map the account's ID to accountId
     ReportResponse toReportResponse(Report report);
 
     @Mapping(source = "account.id", target = "accountId") // Map the account's ID to accountId
