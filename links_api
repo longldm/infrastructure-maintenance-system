@@ -4,7 +4,13 @@ http://localhost:8080/identity/auth/token
     "username": "admin",
     "password": "admin"
 }
-return token
+
+{
+    "username": "manager1",
+    "password": "duong2002"
+}
+token:
+eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkdW9uZ3B0NTgyIiwic3ViIjoibWFuYWdlcjEiLCJleHAiOjE3MzI2NDE3MDIsImlhdCI6MTczMjYzODEwMiwianRpIjoiMGRjYTZiMTktMDNjZC00NTFiLTg5NTAtNzIzZWVhNGNiOTcwIiwic2NvcGUiOiJST0xFX01BTkFHRVIifQ.tzLaGpVQN2X82_MxrBIMIkADnqhn4_KBKuHSrYXz6lxZwBucV6Zv-BTrpAt_DPAl3BbAn-EQnQSGJ6gTMebuJQreturn token
 
 2. Test hello world api
 http://localhost:8080/identity/users/hello + Bearer Token
@@ -15,10 +21,28 @@ http://localhost:8080/identity/users + Bearer Token
 POST: create user:
 {
     "username": "manager1",
-    "password": "okokokok",
+    "password": "duong2002",
     "firstName": "Duong",
     "lastName": "Pham Thai",
     "dob": "2002-05-08",
     "role": "MANAGER"
 }
+
+4. Report api
+base_url: http://localhost:8080/identity
+POST: {{base_url}}/report_management + Bearer Token
+    body:
+    {
+      "accountId": "0f5fbdc1-afda-45e8-bf44-5c3868441008",
+      "lectureHall": {
+        "id": 1,
+        "building": "Main Building",
+        "floor": "3nd Floor",
+        "room": "Room 305"
+      },
+      "details": "This is a detailed description of the report.",
+      "priority": "HIGH",
+      "critical": true,
+      "stage": "OPEN"
+    }
 

@@ -33,9 +33,6 @@ public class Report {
     @Column(name = "stage", nullable = false, columnDefinition = "ENUM('open', 'in_progress', 'resolved') DEFAULT 'open'")
     private Stage stage = Stage.OPEN;
 
-    @Column(name = "assigned_account_id")
-    private Integer assignedAccountId;
-
     @Column(name = "feedback_ratings", nullable = false, columnDefinition = "INT DEFAULT 0")
     private Integer feedbackRatings = 0;
 
@@ -136,14 +133,6 @@ public class Report {
 
     public void setStage(Stage stage) {
         this.stage = stage;
-    }
-
-    public Integer getAssignedAccountId() {
-        return assignedAccountId;
-    }
-
-    public void setAssignedAccountId(Integer assignedAccountId) {
-        this.assignedAccountId = assignedAccountId;
     }
 
     public Integer getFeedbackRatings() {
