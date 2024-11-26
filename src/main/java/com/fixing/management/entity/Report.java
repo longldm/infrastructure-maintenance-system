@@ -1,5 +1,7 @@
 package com.fixing.management.entity;
 
+import com.fixing.management.exception.AppException;
+import com.fixing.management.exception.ErrorCode;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -30,7 +32,7 @@ public class Report {
     private Boolean critical;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "stage", nullable = false, columnDefinition = "ENUM('open', 'in_progress', 'resolved') DEFAULT 'open'")
+    @Column(name = "stage", nullable = false, columnDefinition = "ENUM('OPEN', 'IN_PROGRESS', 'RESOLVED') DEFAULT 'OPEN'")
     private Stage stage = Stage.OPEN;
 
     @Column(name = "feedback_ratings", nullable = false, columnDefinition = "INT DEFAULT 0")

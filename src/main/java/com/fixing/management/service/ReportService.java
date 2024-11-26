@@ -2,14 +2,12 @@ package com.fixing.management.service;
 
 import com.fixing.management.dto.request.ReportCreationRequest;
 import com.fixing.management.dto.response.ReportResponse;
-import com.fixing.management.dto.response.UserResponse;
 import com.fixing.management.entity.LectureHall;
 import com.fixing.management.entity.Report;
 import com.fixing.management.entity.User;
 import com.fixing.management.exception.AppException;
 import com.fixing.management.exception.ErrorCode;
 import com.fixing.management.mapper.ReportMapper;
-import com.fixing.management.mapper.UserMapper;
 import com.fixing.management.repository.LectureHallRepository;
 import com.fixing.management.repository.ReportRepository;
 import com.fixing.management.repository.UserRepository;
@@ -20,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import static org.hibernate.query.sqm.tree.SqmNode.log;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,9 +54,17 @@ public class ReportService {
         return reportMapper.toReportResponse(report);
     }
 
-    @PreAuthorize("hasRole('ADMIN', 'MANAGER', 'REPORTER_ROLE')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'REPORTER_ROLE')")
     public ReportResponse getReport(int id) {
         return reportMapper.toReportResponse(
-                reportRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND)));
+                reportRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND))
+        );
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'REPORTER_ROLE')")
+    public List<ReportResponse> getReportByAccountId(String userId) {
+        List<Report> reports = reportRepository.findByAccountId(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
+        return reportMapper.toReportResponseList(reports);
     }
 }

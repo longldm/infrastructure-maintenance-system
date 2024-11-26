@@ -12,6 +12,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.util.List;
+
 
 @Mapper(componentModel = "spring")
 public interface ReportMapper {
@@ -19,6 +21,9 @@ public interface ReportMapper {
 
     @Mapping(source = "account.id", target = "accountId") // Map the account's ID to accountId
     ReportResponse toReportResponse(Report report);
+
+    @Mapping(source = "account.id", target = "accountId") // Map the account's ID to accountId
+    List<ReportResponse> toReportResponseList(List<Report> reports);
 
     @Mapping(target = "account", ignore = true)
     void updateReport(@MappingTarget Report report, ReportUpdateRequest request);

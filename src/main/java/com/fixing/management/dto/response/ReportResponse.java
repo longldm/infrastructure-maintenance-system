@@ -1,8 +1,10 @@
 package com.fixing.management.dto.response;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fixing.management.entity.LectureHall;
 import com.fixing.management.entity.Report;
 import com.fixing.management.entity.User;
+import com.fixing.management.util.StageDeserializer;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,6 +20,6 @@ public class ReportResponse {
     private String details;
     private Report.Priority priority;
     private Boolean critical;
-    @Builder.Default
+//    @JsonDeserialize(using = StageDeserializer.class)
     private Report.Stage stage = Report.Stage.OPEN;
 }

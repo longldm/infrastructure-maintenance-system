@@ -9,6 +9,9 @@ http://localhost:8080/identity/auth/token
     "username": "manager1",
     "password": "duong2002"
 }
+
+Tao tai khoan bang quyen admin.
+Cac tai khoan, matkhau mac dinh cua cac role mac dinh la manager1, supervisor1, reporter1 --- tat ca pass: duong2002
 token:
 eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkdW9uZ3B0NTgyIiwic3ViIjoibWFuYWdlcjEiLCJleHAiOjE3MzI2NDE3MDIsImlhdCI6MTczMjYzODEwMiwianRpIjoiMGRjYTZiMTktMDNjZC00NTFiLTg5NTAtNzIzZWVhNGNiOTcwIiwic2NvcGUiOiJST0xFX01BTkFHRVIifQ.tzLaGpVQN2X82_MxrBIMIkADnqhn4_KBKuHSrYXz6lxZwBucV6Zv-BTrpAt_DPAl3BbAn-EQnQSGJ6gTMebuJQreturn token
 
