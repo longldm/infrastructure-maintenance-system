@@ -43,7 +43,7 @@ docker pull mysql:8.0.36-debian
 ```
 Create and run a MySQL container:
 ```bash
-docker run --name mysql-backend -e MYSQL_ROOT_PASSWORD=rootpassword -e MYSQL_DATABASE=your_database -p 3306:3306 -d mysql:8.0.36-debian
+docker run --name mysql-backend -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8.0.36-debian
 ```
 Replace rootpassword with your desired root password.
 Replace your_database with the name of your database.
@@ -68,6 +68,10 @@ Use the following connection details:
 Test the connection to ensure it's working properly.
 
 ### Step 4: Import Database Schema (if applicable)
+
+Create a database schema name: identity_service
+
+Or
 
 If the project includes a .sql file for setting up the schema, import it using MySQL Workbench:
 
