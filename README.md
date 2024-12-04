@@ -43,7 +43,7 @@ docker pull mysql:8.0.36-debian
 ```
 Create and run a MySQL container:
 ```bash
-docker run --name mysql-backend -e MYSQL_ROOT_PASSWORD=rootpassword -e MYSQL_DATABASE=your_database -p 3306:3306 -d mysql:8.0.36-debian
+docker run --name mysql-backend -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -d mysql:8.0.36-debian
 ```
 Replace rootpassword with your desired root password.
 Replace your_database with the name of your database.
@@ -69,6 +69,10 @@ Test the connection to ensure it's working properly.
 
 ### Step 4: Import Database Schema (if applicable)
 
+Create a database schema name: identity_service
+
+Or
+
 If the project includes a .sql file for setting up the schema, import it using MySQL Workbench:
 
   + Open MySQL Workbench.
@@ -88,9 +92,9 @@ If the project includes a .sql file for setting up the schema, import it using M
 
   + Configure MySQL connection: Edit your `src/main/resources/application.properties` (or application.yml) to configure your MySQL connection. Example:
 
-        spring.datasource.url=jdbc:mysql://localhost:3306/your_database
+        spring.datasource.url=jdbc:mysql://localhost:3306/identity_service
         spring.datasource.username=root
-        spring.datasource.password=rootpassword
+        spring.datasource.password=root
         spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
   + Replace your_database with the database you created in Docker.
