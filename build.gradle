@@ -40,6 +40,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.security:spring-security-test'
 
+	testImplementation 'org.apache.httpcomponents.client5:httpclient5'
 	// MySQL runtime dependency
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
