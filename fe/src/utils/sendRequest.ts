@@ -21,7 +21,10 @@ export interface IResponseRequest {
 
 export const sendRequest = async (url: string, options?: Partial<RequestOptions>) => {
     const method = options?.method || "GET";
-    let config: AxiosRequestConfig = { method: method, url: url };
+    let config: AxiosRequestConfig = { 
+        method: method, 
+        url: url,
+    };
     if (options?.payload) {
         if (method.toUpperCase() === "GET") {
             config["params"] = options.payload;

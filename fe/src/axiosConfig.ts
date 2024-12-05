@@ -4,9 +4,17 @@ import { trackPromise } from "react-promise-tracker";
 
 type RefreshTokenRequestFunction = () => Promise<void | { idToken: string, refreshToken: string; }>;
 let refreshTokenRequest: any = null;
+// axios.defaults.withCredentials = false;
 
 // Inject id_token for authorization
 export const handleAxiosRequest = async (config: InternalAxiosRequestConfig) => {
+    if (config.url?.includes("/auth/token")) {
+        // Skip adding Authorization for login request
+        return config;
+    }
+
+    config.headers.set("ngrok-skip-browser-warning", true);
+    
     if (config.url === "/auth/refresh") {
         // Refresh token
         let refresh_token = localStorage.getItem('refresh_token');
@@ -18,6 +26,11 @@ export const handleAxiosRequest = async (config: InternalAxiosRequestConfig) => 
             config.headers.set('Authorization', "Bearer " + id_token);
         }
     }
+    
+    if (!config.headers['Content-Type']) {
+        config.headers['Content-Type'] = 'application/json';
+    }
+
     // Set the timeout from the config if provided
     if (config.timeout) {
         axios.defaults.timeout = config.timeout;

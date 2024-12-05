@@ -1,14 +1,52 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { sendRequest } from '../../utils/sendRequest';
+import { ILogInResponse } from '../../types/Auth';
+import { IGetUserInfoResponse } from '../../types/User';
 
-export const loginRequest = createAsyncThunk(
+export interface ILoginPayload {
+    username: string;
+    password: string;
+}
+
+const testting: any = {
+    "username": "reporter1",
+    "password": "duong2002"
+}
+
+export const loginRequest = createAsyncThunk<ILogInResponse, ILoginPayload>(
     'api/login',
-    async (payload: { username: string; password: string }, thunkApi) => {
+    async (payload: ILoginPayload, thunkApi) => {
         return await sendRequest(
-            "/auth/login",
+            "https://259b-42-113-16-68.ngrok-free.app/identity/auth/token",
             {
                 payload: payload ,
                 method: "POST",
+                thunkApi,
+            }
+        );
+    }
+);
+
+export const getUserInfo = createAsyncThunk<IGetUserInfoResponse, void>(
+    'api/user-info',
+    async (thunkApi) => {
+        return await sendRequest(
+            "https://259b-42-113-16-68.ngrok-free.app/identity/users/my-info",
+            {
+                method: "GET",
+                thunkApi,
+            }
+        );
+    }
+);
+
+export const testApiT = createAsyncThunk(
+    'api/test',
+    async (thunkApi) => {
+        return await sendRequest(
+            "/users/hello",
+            {
+                method: "GET",
                 thunkApi
             }
         );

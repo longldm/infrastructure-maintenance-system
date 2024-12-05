@@ -1,23 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { loginRequest } from './loginApi';
+import { getUserInfo, loginRequest } from './loginApi';
+import { IUser } from '../../types/User';
 
 
 // Try to load user info from local storage
 let id_token = localStorage.getItem('id_token');
 let refresh_token = localStorage.getItem('refresh_token');
-let roleId = null;
-let userId = null;
-let supperAdmin = false;
 let isAuthenticated = Boolean(id_token && refresh_token);
+
 if (id_token) {
     try {
         let tokenDecode: any = jwtDecode(id_token);
         if (tokenDecode) {
-            roleId = tokenDecode['role_id'];
-            userId = tokenDecode['user_id'];
-            supperAdmin = tokenDecode['super_admin'];
         } else {
             isAuthenticated = false;
         }
@@ -48,12 +44,6 @@ if (!isAuthenticated) {
     sessionStorage.removeItem('refresh_token');
 }
 
-export interface IUser {
-    id: number,
-    roleId: number,
-    isSuperAdmin: boolean;
-}
-
 interface AuthState {
     isAuthenticated: boolean,
     error: string,
@@ -70,10 +60,18 @@ const initialState: AuthState = {
     statusCode: 0,
     loading: false,
     currentUser: {
-        id: userId,
-        roleId: roleId,
-        isSuperAdmin: supperAdmin,
-    }
+        id: '',
+        username: '',
+        firstName: '',
+        lastName: '',
+        dob: '',
+        role: {
+            id: -1,
+            name: '',
+            description: '',
+            permissions: [],
+        },
+    },
 };
 
 const authSlice = createSlice({
@@ -92,21 +90,40 @@ const authSlice = createSlice({
             sessionStorage.removeItem('refresh_token');
         },
         updateUserInfo: (state, action) => {
-            state.currentUser.id = action.payload.user_id;
-            state.currentUser.roleId = action.payload.role_id;
-            state.currentUser.isSuperAdmin = action.payload.super_admin;
+            state.currentUser = action.payload.result.user;
         },
     },
     extraReducers: builder => {
-        builder.addCase(loginRequest.fulfilled, (state, action) => {
+        builder
+            .addCase(loginRequest.fulfilled, (state, action) => {
             if (action.payload) {
                 state.isAuthenticated = true;
-                localStorage.setItem('id_token', action.payload.idToken);
-                localStorage.setItem('refresh_token', action.payload.refreshToken);
-                axios.defaults.headers.common['Authorization'] = "Bearer " + action.payload.idToken;
+                localStorage.setItem('id_token', action.payload.result.token);
+                localStorage.setItem('refresh_token', action.payload.result.token);
+                axios.defaults.headers.common['Authorization'] = "Bearer " + action.payload.result.token;
                 state.error = '';
             }
-        });
+            })
+            .addCase(getUserInfo.fulfilled, (state, action) => {
+                console.log('action.payload', action.payload);
+                state.currentUser.id = action.payload.result.id;
+                state.currentUser.username = action.payload.result.username;
+                state.currentUser.firstName = action.payload.result.firstName;
+                state.currentUser.lastName = action.payload.result.lastName;
+                state.currentUser.dob = action.payload.result.dob;
+                state.currentUser.role.name = action.payload.result.roles[0].name;
+                state.currentUser.role.description = action.payload.result.roles[0].description;
+                state.currentUser.role.permissions = action.payload.result.roles[0].permissions;
+                if (action.payload.result.roles[0].name === 'REPORTER') {
+                    state.currentUser.role.id = 1;
+                } else if (action.payload.result.roles[0].name === 'MANAGER') {
+                    state.currentUser.role.id = 2;
+                } else if (action.payload.result.roles[0].name === 'SUPERVISOR') {
+                    state.currentUser.role.id = 3;
+                } else if (action.payload.result.roles[0].name === 'ADMIN') {
+                    state.currentUser.role.id = 4;
+                }
+            })
 
     }
 });

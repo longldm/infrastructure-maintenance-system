@@ -15,6 +15,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<ThemeLoader />}>
+          <Route path="/login" element={<Login />} />
           <Route path="/" element={<Home />} />
           <Route element={<PrivateRoute />}>
             <Route element={<BaseLayout />}>
