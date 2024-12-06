@@ -125,10 +125,10 @@ function Response() {
                             <div className="modal-footer">
                                 <button
                                     type="button"
-                                    className="btn btn-secondary"
+                                    className="btn btn-primary"
                                     onClick={closeModal}
                                 >
-                                    Hủy
+                                    Xác nhận hoàn thành
                                 </button>
                                 <button
                                     type="button"
