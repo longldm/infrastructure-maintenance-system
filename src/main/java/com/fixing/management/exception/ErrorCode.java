@@ -17,7 +17,10 @@ public enum ErrorCode {
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
     INVALID_DOB(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
     REPORT_NOT_FOUND(1009, "Report not found", HttpStatus.NOT_FOUND),
-    USER_NOT_FOUND(1010, "User not found", HttpStatus.NOT_FOUND),;
+    USER_NOT_FOUND(1010, "User not found", HttpStatus.NOT_FOUND),
+    UNAUTHORIZED_USER(1011, "You cannot change stage reports", HttpStatus.BAD_REQUEST),
+    INVALID_STAGE_TRANSITION(1012, "Invalid stage", HttpStatus.BAD_REQUEST),
+    DATABASE_ERROR(1013, "Invalid Database Request", HttpStatus.BAD_REQUEST),;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

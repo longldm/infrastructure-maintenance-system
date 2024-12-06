@@ -49,3 +49,62 @@ POST: {{base_url}}/report_management + Bearer Token
       "stage": "OPEN"
     }
 
+5. Update Stage API
+base_url: http://localhost:8080/identity
+POST {{base_url}}/report_management/{id}/update-stage + Bearer Token
+
+body
+{
+  "assignedSupervisorId": "supervisor-user-id",
+  "stage": "IN_PROGRESS"
+}
+
+6. Create Report Notes API
+
+base_url: http://localhost:8080/identity
+POST {{base_url}}/report_management/{id}/add-note + Bearer Token
+
+body
+{
+  "details": "This is a note explaining the progress of the report."
+}
+
+Expected response
+Status 201 Created
+{
+  "result": {
+    "reportId": 1,
+    "details": "This is a note explaining the progress of the report.",
+    "createdAt": "2024-12-06T15:00:00",
+    "createdBy": "username_of_creator"
+  }
+}
+
+7. List Reports API
+base_url: http://localhost:8080/identity
+POST {{base_url}}/report_management/assigned + Bearer Token
+body
+{
+}
+
+Expected Response
+{
+  "result": [
+    {
+      "reportId": 1,
+      "details": "Report on broken projector",
+      "priority": "HIGH",
+      "stage": "IN_PROGRESS",
+      "createdAt": "2024-12-05T10:00:00",
+      "createdBy": "john_doe"
+    },
+    {
+      "reportId": 2,
+      "details": "Report on faulty lights",
+      "priority": "MEDIUM",
+      "stage": "OPEN",
+      "createdAt": "2024-12-06T11:00:00",
+      "createdBy": "jane_doe"
+    }
+  ]
+}
