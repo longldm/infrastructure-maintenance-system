@@ -25,6 +25,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -103,11 +105,6 @@ public class ReportService {
         Report report = reportRepository.findById(request.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
 
-        // Check if the current user is allowed to update the stage (reporter or supervisor)
-        if (!isUserAllowedToUpdateStage(report, request.getAssignedSupervisorId())) {
-            throw new AppException(ErrorCode.UNAUTHORIZED_USER);
-        }
-
         // Get the current stage and requested new stage
         Report.Stage currentStage = report.getStage();
         Report.Stage newStage = request.getStage();
@@ -118,7 +115,7 @@ public class ReportService {
             return reportMapper.toReportResponse(report); // No changes made, return the same report
         }
 
-        // Since we're allowing all valid stage transitions, we simply ensure the new stage is valid
+        // Ensure the new stage is valid
         if (newStage == null || !isValidStage(newStage.name())) {
             throw new AppException(ErrorCode.INVALID_STAGE_TRANSITION);
         }
@@ -139,12 +136,6 @@ public class ReportService {
         return reportMapper.toReportResponse(report);
     }
 
-    private boolean isUserAllowedToUpdateStage(Report report, String userId) {
-        // Check if the user is either the reporter or the assigned supervisor
-        return report.getAccount().getId().equals(userId) ||
-                (report.getAssignedAccountId() != null && report.getAssignedAccountId().getId().equals(userId));
-    }
-
     private boolean isValidStage(String stageName) {
         try {
             // Try to parse the stage name into the corresponding enum
@@ -153,6 +144,47 @@ public class ReportService {
         } catch (IllegalArgumentException e) {
             return false; // If the value is invalid, an exception will be thrown
         }
+    }
+
+
+    public List<ReportResponse> getReportsAssignedToSupervisor(String supervisorId) {
+        // Fetch the user (supervisor) by accountId
+        User supervisor = userRepository.findById(supervisorId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        // Ensure the user has the 'SUPERVISOR' role
+        if (!supervisorHasRoleSupervisor(supervisor)) {
+            throw new AppException(ErrorCode.UNAUTHORIZED_USER);  // Or ErrorCode.FORBIDDEN
+        }
+
+        // Fetch all reports assigned to the supervisor (by assignedAccountId)
+        List<Report> reports = reportRepository.findByAssignedAccountId(supervisorId);
+
+        // Map the list of reports to ReportResponse
+        return reports.stream()
+                .map(this::toReportResponse)  // Convert each Report to ReportResponse
+                .collect(Collectors.toList());
+    }
+
+
+    private boolean supervisorHasRoleSupervisor(User supervisor) {
+        // Check if the supervisor has the 'SUPERVISOR' role
+        return supervisor.getRoles().stream()
+                .anyMatch(role -> role.getName().equals("ROLE_SUPERVISOR"));
+    }
+
+    private ReportResponse toReportResponse(Report report) {
+        // Map Report entity to ReportResponse DTO
+        return new ReportResponse(
+                String.valueOf(report.getId()),  // Convert report id to String
+                report.getAccount().getId(),  // Reporter ID
+                report.getAssignedAccountId() != null ? report.getAssignedAccountId().getId() : null,  // Assigned supervisor ID
+                report.getLectureHall(),  // Lecture hall information
+                report.getDetails(),  // Report details
+                report.getPriority(),  // Report priority
+                report.getCritical(),  // Critical status
+                report.getStage()  // Report stage
+        );
     }
 
 
@@ -184,15 +216,33 @@ public class ReportService {
         );
     }
 
-    @PreAuthorize("hasRole('SUPERVISOR')")
-    public List<ReportResponse> getReportsAssignedToSupervisor(String userId) {
-        // Fetch all reports assigned to the supervisor
-        List<Report> reports = reportRepository.findByAccountId(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")  // Ensure only Admin or Manager can access this
+    public List<ReportResponse> getAllReports(String accountId) {
+        // Fetch the user by accountId to validate the role
+        User user = userRepository.findById(accountId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        // Convert the reports to the response format
-        return reportMapper.toReportResponseList(reports);
+        // Check if the user has the required role (ADMIN or MANAGER)
+        if (!userHasValidRole(user)) {
+            throw new AppException(ErrorCode.UNAUTHORIZED_USER);  // Or ErrorCode.FORBIDDEN depending on your choice
+        }
+
+        // Fetch all reports from the database
+        List<Report> reports = reportRepository.findAll();
+
+        // Map the list of reports to ReportResponse
+        return reports.stream()
+                .map(this::toReportResponse)  // Convert each Report to ReportResponse
+                .collect(Collectors.toList());
     }
+
+    // Helper method to check if the user has the correct roles
+    private boolean userHasValidRole(User user) {
+        return user.getRoles().stream()
+                .anyMatch(role -> role.getName().equals("ROLE_ADMIN") || role.getName().equals("ROLE_MANAGER"));
+    }
+
+
 
 
 }

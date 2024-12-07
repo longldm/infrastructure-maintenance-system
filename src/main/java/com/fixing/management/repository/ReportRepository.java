@@ -12,4 +12,6 @@ import java.util.Optional;
 @Repository
 public interface ReportRepository extends JpaRepository<Report, Integer> {
     Optional<List<Report>> findByAccountId(String accountId);
+
+    List<Report> findByAssignedAccountId(String supervisorId);
 }

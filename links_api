@@ -1,5 +1,5 @@
 1. Login
-http://localhost:8080/identity/auth/token
+POST http://localhost:8080/identity/auth/token
 {
     "username": "admin",
     "password": "admin"
@@ -16,10 +16,10 @@ token:
 eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkdW9uZ3B0NTgyIiwic3ViIjoibWFuYWdlcjEiLCJleHAiOjE3MzI2NDE3MDIsImlhdCI6MTczMjYzODEwMiwianRpIjoiMGRjYTZiMTktMDNjZC00NTFiLTg5NTAtNzIzZWVhNGNiOTcwIiwic2NvcGUiOiJST0xFX01BTkFHRVIifQ.tzLaGpVQN2X82_MxrBIMIkADnqhn4_KBKuHSrYXz6lxZwBucV6Zv-BTrpAt_DPAl3BbAn-EQnQSGJ6gTMebuJQreturn token
 
 2. Test hello world api
-http://localhost:8080/identity/users/hello + Bearer Token
+GET http://localhost:8080/identity/users/hello + Bearer Token
 
 3. Get users api
-http://localhost:8080/identity/users + Bearer Token
+GET http://localhost:8080/identity/users + Bearer Token
 
 POST: create user:
 {
@@ -55,17 +55,18 @@ POST {{base_url}}/report_management/{id}/update-stage + Bearer Token
 
 body
 {
-  "assignedSupervisorId": "supervisor-user-id",
+  "id": 1,
   "stage": "IN_PROGRESS"
 }
 
 6. Create Report Notes API
 
 base_url: http://localhost:8080/identity
-POST {{base_url}}/report_management/{id}/add-note + Bearer Token
+POST {{base_url}}/report_management/add-note + Bearer Token
 
 body
 {
+  reportId": 1,
   "details": "This is a note explaining the progress of the report."
 }
 
@@ -73,12 +74,16 @@ Expected response
 Status 201 Created
 {
   "result": {
-    "reportId": 1,
+    "id": 123,
+    "reportId": 1,       // The Report ID to which the note is attached
     "details": "This is a note explaining the progress of the report.",
-    "createdAt": "2024-12-06T15:00:00",
-    "createdBy": "username_of_creator"
+    "createdAt": "2024-12-05T10:00:00",
+    "updatedAt": "2024-12-05T10:00:00",
+    "createdBy": "john_doe",
+    "updatedBy": "john_doe"
   }
 }
+
 
 7. List Reports API
 base_url: http://localhost:8080/identity
@@ -107,4 +112,12 @@ Expected Response
       "createdBy": "jane_doe"
     }
   ]
+}
+
+8 Manager Fetch Request
+base_url: http://localhost:8080/identity
+POST {{base_url}}/report_management/all + Bearer Token
+
+{
+  "accountId": "admin-or-manager-account-id"
 }

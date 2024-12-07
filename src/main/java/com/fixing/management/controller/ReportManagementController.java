@@ -1,9 +1,6 @@
 package com.fixing.management.controller;
 
-import com.fixing.management.dto.request.ApiResponse;
-import com.fixing.management.dto.request.ReportCreationRequest;
-import com.fixing.management.dto.request.ReportNoteCreationRequest;
-import com.fixing.management.dto.request.ReportUpdateRequest;
+import com.fixing.management.dto.request.*;
 import com.fixing.management.dto.response.ReportNoteResponse;
 import com.fixing.management.dto.response.ReportResponse;
 import com.fixing.management.service.ReportService;
@@ -56,51 +53,51 @@ public class ReportManagementController {
                 .build();
     }
 
-    @PutMapping("/{id}/update-stage")  // Use the report ID as a path variable
-    ApiResponse<ReportResponse> updateReportStage(
-            @PathVariable("id") int id,  // Capture the report ID from the URL
-            @RequestBody @Valid ReportUpdateRequest request) {  // Capture the stage change data from the request body
-
-        // Set the report ID in the request DTO (if needed in the service)
-        request.setId(id);
-
-        // Call the service to update the report's stage
+    @PostMapping("/update-stage")
+    ApiResponse<ReportResponse> updateReportStage(@RequestBody @Valid ReportUpdateRequest request) {
+        // Call the service to update the report's stage using the data from the request body
         return ApiResponse.<ReportResponse>builder()
-                .result(reportService.updateReportStage(request))  // Call the service method
+                .result(reportService.updateReportStage(request))
                 .build();
     }
 
 
 
-    @PostMapping("/{id}/add-note")
+
+    @PostMapping("/add-note")
     ApiResponse<ReportNoteResponse> addNoteToReport(
-            @PathVariable("id") int reportId,  // Capture the report ID from the URL
             @RequestBody @Valid ReportNoteCreationRequest request  // Capture the note details from the request body
     ) {
+        // Extract the reportId from the request body (assuming it's passed in the request)
+        int reportId = request.getReportId();  // Assuming 'reportId' is in the request body
+
         // Extract the userId from the authenticated context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = authentication.getName();  // Assume username represents userId
 
         // Call the service to add the note
         return ApiResponse.<ReportNoteResponse>builder()
-                .result(reportService.addNoteToReport(reportId, request, userId))  // Call the service method
+                .result(reportService.addNoteToReport(reportId, request, userId))  // Pass reportId, request, and userId to the service method
                 .build();
     }
 
-    @PostMapping("/assigned")
-    ApiResponse<List<ReportResponse>> getReportsAssignedToMe() {
-        // Extract the supervisorId (userId) from the JWT token
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String supervisorId = authentication.getName();  // Assuming username is the userId
 
-        // Call the service to get the reports assigned to the supervisor
-        List<ReportResponse> assignedReports = reportService.getReportsAssignedToSupervisor(supervisorId);
-
-        // Return the response wrapped in ApiResponse
+    @GetMapping("/supervisor-reports")
+    ApiResponse<List<ReportResponse>> getReportsAssignedToSupervisor(@RequestParam String supervisorId) {
+        // Call the service method to get all reports assigned to the supervisor
         return ApiResponse.<List<ReportResponse>>builder()
-                .result(assignedReports)
+                .result(reportService.getReportsAssignedToSupervisor(supervisorId))  // Passing supervisorId to the service
                 .build();
     }
+
+    @PostMapping("/all")
+    ApiResponse<List<ReportResponse>> getAllReports(@RequestBody @Valid AccountIdRequest accountIdRequest) {
+        // Call the service method to get all reports based on accountId
+        return ApiResponse.<List<ReportResponse>>builder()
+                .result(reportService.getAllReports(accountIdRequest.getAccountId()))  // Passing accountId to the service
+                .build();
+    }
+
 
 
 }
