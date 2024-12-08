@@ -1,8 +1,7 @@
 package com.fixing.management.controller;
 
 import com.fixing.management.dto.request.*;
-import com.fixing.management.dto.response.ReportNoteResponse;
-import com.fixing.management.dto.response.ReportResponse;
+import com.fixing.management.dto.response.*;
 import com.fixing.management.service.ReportService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -98,6 +97,25 @@ public class ReportManagementController {
                 .build();
     }
 
+    @PostMapping("/reports-resolved-by-month")
+    public ReportsResolvedByMonthResponse getResolvedReportsByMonth(
+            @RequestBody @Valid ReportsResolvedByMonthRequest request) {
+        // Call the service and return the response
+        return reportService.getResolvedReportsByMonth(request.getYear());
+    }
+
+    @GetMapping("/average-rating")
+    public ReportsAverageRatingResponse getAverageRatingBySupervisor() {
+        // Call the service to get the average ratings by supervisor
+        return reportService.getAverageRatingBySupervisor();
+    }
+
+    @PostMapping("/reports-processed-by-supervisor")
+    public ReportsProcessedBySupervisorResponse getReportCountBySupervisorAndMonth(
+            @RequestBody @Valid ReportsProcessedBySupervisorRequest request) {
+        // Call the service to get the report count by supervisor and month
+        return reportService.getReportCountBySupervisorAndMonth(request.getYear());
+    }
 
 
 }

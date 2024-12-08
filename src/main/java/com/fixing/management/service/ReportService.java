@@ -3,8 +3,7 @@ package com.fixing.management.service;
 import com.fixing.management.dto.request.ReportCreationRequest;
 import com.fixing.management.dto.request.ReportNoteCreationRequest;
 import com.fixing.management.dto.request.ReportUpdateRequest;
-import com.fixing.management.dto.response.ReportNoteResponse;
-import com.fixing.management.dto.response.ReportResponse;
+import com.fixing.management.dto.response.*;
 import com.fixing.management.entity.LectureHall;
 import com.fixing.management.entity.Report;
 import com.fixing.management.entity.ReportNote;
@@ -24,7 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -240,6 +241,65 @@ public class ReportService {
     private boolean userHasValidRole(User user) {
         return user.getRoles().stream()
                 .anyMatch(role -> role.getName().equals("ROLE_ADMIN") || role.getName().equals("ROLE_MANAGER"));
+    }
+
+
+    public ReportsResolvedByMonthResponse getResolvedReportsByMonth(int year) {
+        // Fetch raw data from the repository
+        List<Object[]> rawResults = reportRepository.getResolvedReportsByMonth(year);
+
+        // Convert the raw data into a Map<String, Integer>
+        Map<String, Integer> monthlyCounts = rawResults.stream()
+                .collect(Collectors.toMap(
+                        result -> (String) result[0],  // Month name
+                        result -> ((Number) result[1]).intValue()  // Report count
+                ));
+
+        // Return the formatted response
+        return new ReportsResolvedByMonthResponse(monthlyCounts);
+    }
+
+    public ReportsAverageRatingResponse getAverageRatingBySupervisor() {
+        // Fetch raw data from the repository
+        List<Object[]> rawResults = reportRepository.getAverageRatingBySupervisor();
+
+        // Process the raw data into a list of SupervisorRatingResponse
+        List<SupervisorRatingResponse> supervisorRatings = rawResults.stream()
+                .map(result -> new SupervisorRatingResponse(
+                        (String) result[0], // Supervisor ID
+                        (Double) result[1]   // Average rating
+                ))
+                .collect(Collectors.toList());
+
+        // Return the result wrapped in the response DTO
+        return new ReportsAverageRatingResponse(supervisorRatings);
+    }
+
+
+    public ReportsProcessedBySupervisorResponse getReportCountBySupervisorAndMonth(int year) {
+        // Fetch raw data from the repository (only DONE reports)
+        List<Object[]> rawResults = reportRepository.getReportCountBySupervisorAndMonth(year);
+
+        // Process the raw data into a map (supervisor ID -> Map<month, count>)
+        Map<String, Map<String, Integer>> supervisorMonthlyReportCounts = new HashMap<>();
+
+        for (Object[] result : rawResults) {
+            String supervisorId = (String) result[0];  // Supervisor ID
+            String monthName = (String) result[1];     // Month name (e.g., "January")
+            Integer reportCount = ((Number) result[2]).intValue();  // Report count
+
+            // Initialize the map for the supervisor if it doesn't exist
+            supervisorMonthlyReportCounts
+                    .computeIfAbsent(supervisorId, k -> new HashMap<>())
+                    .put(monthName, reportCount);
+        }
+
+        // Map the data into the response DTO
+        List<SupervisorMonthlyReportCount> supervisorReportCounts = supervisorMonthlyReportCounts.entrySet().stream()
+                .map(entry -> new SupervisorMonthlyReportCount(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+
+        return new ReportsProcessedBySupervisorResponse(supervisorReportCounts);
     }
 
 

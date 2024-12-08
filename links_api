@@ -121,3 +121,27 @@ POST {{base_url}}/report_management/all + Bearer Token
 {
   "accountId": "admin-or-manager-account-id"
 }
+
+9 Summary APIs
+
+9.1
+base_url: http://localhost:8080/identity
+POST {{base_url}}/report_management/reports-resolved-by-month + Bearer Token
+
+body
+{
+  "year": 2023
+}
+
+9.2
+base_url: http://localhost:8080/identity
+GET {{base_url}}/report_management/average-rating + Bearer Token
+
+9.3
+base_url: http://localhost:8080/identity
+POST {{base_url}}/report_management/reports-processed-by-supervisor + Bearer Token
+
+body
+{
+  "year": 2023
+}
