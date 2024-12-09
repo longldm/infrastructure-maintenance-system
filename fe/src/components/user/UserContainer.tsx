@@ -1,7 +1,36 @@
+import { useState } from 'react';
+import CreateReport from './createReport/CreateReport';
+
 function UserContainer() {
+    const [activeSection, setActiveSection] = useState<string>('section1');
+
+
     return (
         <>
-            user
+            <div className="container-fluid vh-100">
+                <div className="row h-100">
+                    {/* Menu Bar */}
+                    <div className="col-3 bg-light border-end p-3">
+                        {/* <h4>Menu</h4> */}
+                        <button
+                            className={`btn w-100 mb-2 ${activeSection === 'section1' ? 'btn-primary' : 'btn-outline-primary'}`}
+                            onClick={() => setActiveSection('section1')}
+                        >
+                            Tạo báo cáo
+                        </button>
+                    </div>
+
+                    {/* Content Area */}
+                    <div className="col-9 p-4">
+                        {activeSection === 'section1' && (
+                            <div>
+                                <h3>Tạo báo cáo</h3>
+                                <CreateReport />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
         </>
     );
 }
