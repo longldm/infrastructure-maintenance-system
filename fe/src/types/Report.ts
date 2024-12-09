@@ -7,4 +7,5 @@ export interface ReportItem {
     note: string;
     time: string;
     status: string;
+    ratings: number;
   }
