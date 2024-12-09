@@ -52,7 +52,7 @@ function CreateReport() {
             <div className="mb-3 form-group">
                 <label>Địa điểm: </label>
                 <div className="mt-2 d-flex">
-                    <select className="form-control mr-2" name="building" onChange={handleBuildingChange}>
+                    <select className="form-control mr-2" name="building" value = {building || ''} onChange={handleBuildingChange}>
                         <option value="" selected disabled>Tòa nhà</option>
                         <option value="D3">D3</option>
                         <option value="D3-5">D3-5</option>
@@ -62,12 +62,18 @@ function CreateReport() {
                         <option value="D8">D8</option>
                         <option value="D9">D9</option>
                     </select>
-                    <input className="form-control ml-2" type="text" name="room" placeholder="Phòng" onChange={handleRoomChange} />
+                    <input 
+                        className="form-control ml-2"
+                        type="text"
+                        name="room"
+                        placeholder="Phòng"
+                        value = {room || ''}
+                        onChange={handleRoomChange} />
                 </div>
             </div>
             <div className="mb-3 form-group">
                 <label>Loại sự cố: </label>
-                <select className="mt-2 form-control" onChange={handleEquipmentChange}>
+                <select className="mt-2 form-control" value={equipment || ''} onChange={handleEquipmentChange}>
                     <option value="" selected disabled>Chọn loại sự cố</option>
                     <option value="lightings">Đèn</option>
                     <option value="coolings">Điều hòa</option>
@@ -84,6 +90,7 @@ function CreateReport() {
                     className="mt-2 form-control"
                     rows={5}   // Adjust height
                     placeholder="Ghi chú"
+                    value = {note || ''}
                     onChange={handleNoteChange}
                 />
             </div>
