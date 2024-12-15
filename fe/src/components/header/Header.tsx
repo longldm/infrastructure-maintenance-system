@@ -1,7 +1,6 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import './Header.scss';
-import { ThemeToggleContainer } from "../theme";
 import { logout } from "../auth/authSlice";
 
 const Header = () => {
@@ -17,14 +16,11 @@ const Header = () => {
     return (
         <div className="navbar navbar-expand-lg bg-secondary fixed-top px-3 justify-content-end">
             <div className="d-flex align-items-center justify-content-end">
-                {/* Display Username */}
                 {currentUser && (
                     <span className="me-3 text-white">
                         {currentUser.username || "User"}
                     </span>
                 )}
-
-                {/* Logout Button */}
                 <button
                     className="btn btn-outline-light btn-sm"
                     onClick={onSignout}
@@ -35,22 +31,6 @@ const Header = () => {
                     </svg>
                 </button>
             </div>
-            {/* <div NameName="dropdown">
-                <div className="d-flex align-items-center justify-content-center p-3 link-light text-decoration-none dropdown-toggle cursor-pointer" data-bs-toggle="dropdown">
-                    <i className="fa fa-user-circle-o" aria-hidden="true"></i>
-                </div>
-                <ul className="dropdown-menu text-small shadow">
-                    <li>
-                        <button
-                            className="dropdown-item"
-                            onClick={onSignout}
-                        >
-                            <i className="fa fa-sign-out" aria-hidden="true"></i>
-                            Đăng xuất
-                        </button>
-                    </li>
-                </ul>
-            </div> */}
         </div>
     );
 };

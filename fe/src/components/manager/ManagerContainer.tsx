@@ -1,12 +1,10 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import ManagerReport from "./manageReport/ManageReport";
 import Statistic from "./statistic/Statistic";
-import Response from "./response/Response";
 import { IGetALlReportPayload } from "../../types/Report";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getAllReport, getAllUser } from "./manageReport/managerApi";
 import { getUserInfo } from "../auth/loginApi";
-import { showAlert } from "../../utils/showAlert";
 
 function ManagerContainer() {
     const dispatch = useAppDispatch()
@@ -24,13 +22,13 @@ function ManagerContainer() {
 
     useLayoutEffect(() => {
         dispatch(getAllUser())
-    }, [])
+    }, [dispatch])
 
     useLayoutEffect(() => {
         if (currentUser && currentUser.id !== currentUserId) {
             setCurrentUserId(currentUser.id)
         }
-    }, [currentUser])
+    }, [currentUser, currentUserId])
 
     return (
         <>

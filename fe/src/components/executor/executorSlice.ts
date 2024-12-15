@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllReport } from "../manager/manageReport/managerApi";
 import { IReportItem } from "../../types/Report";
-import { useAppSelector } from "../../app/hooks";
 import { getReportForExecutor, updateReport } from "./executorApi";
 import { showAlert } from "../../utils/showAlert";
 

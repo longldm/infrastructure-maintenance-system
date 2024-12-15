@@ -1,20 +1,17 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import useLoadData from '../../hooks/useLoadData';
 import { USER_ROLE } from '../../constants/role';
 import { useEffect } from 'react';
 import { getUserInfo } from './loginApi';
 
-
 function PrivateRoute() {
-    // useLoadData();
     const dispatch = useAppDispatch()
     const isAuthenticated = useAppSelector(store => store.auth.isAuthenticated);
     const currentUser = useAppSelector(store => store.auth.currentUser);
     
     useEffect(() => {
         dispatch(getUserInfo())
-    }, [])
+    }, [dispatch])
 
     const location = useLocation();
     if (isAuthenticated) {

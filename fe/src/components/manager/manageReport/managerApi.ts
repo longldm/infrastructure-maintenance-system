@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IAssignJobPayload, IAssignJobResponse, IGetALlReportPayload, IGetAllReportResponse, IReportItem } from "../../../types/Report";
+import { IAssignJobPayload, IAssignJobResponse, IGetALlReportPayload, IGetAllReportResponse } from "../../../types/Report";
 import { sendRequest } from "../../../utils/sendRequest";
 import { IGetAllUsersResponse } from "../../../types/User";
 

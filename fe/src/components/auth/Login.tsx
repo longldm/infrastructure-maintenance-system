@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { getUserInfo, ILoginPayload, loginRequest, testApiT,  } from "./loginApi";
+import { getUserInfo, loginRequest } from "./loginApi";
 import { useAppDispatch } from "../../app/hooks";
-import { showAlert } from "../../utils/showAlert";
 import { useNavigate } from "react-router";
 
 function Login() {
@@ -16,11 +15,9 @@ function Login() {
       localStorage.removeItem('userid');
       const res = await dispatch(loginRequest({username: username.trim(), password: password.trim()}));
       if (res.meta.requestStatus === 'fulfilled') {
-        // showAlert(`Đăng nhập thành công`, 'success');
         await dispatch(getUserInfo())
         navigate('/');
       } else {
-        // showAlert(`Sai tài khoản hoặc mật khẩu`, 'danger');
       }
     };
   

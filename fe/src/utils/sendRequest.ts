@@ -2,7 +2,6 @@
 import type { AxiosRequestConfig, Method } from 'axios';
 import axios from 'axios';
 import { trackPromise } from 'react-promise-tracker';
-import { ERROR_STATUS } from '../constants/request';
 import { showAlert } from './showAlert';
 
 interface RequestOptions {
@@ -43,16 +42,7 @@ export const sendRequest = async (url: string, options?: Partial<RequestOptions>
         .catch(error => {
             if (!options?.defineAlert) {
                 if (axios.isAxiosError(error)) {
-                    const statusCode = error.response?.status;
-                    // if (statusCode === axios.HttpStatusCode.Forbidden) {
-                    //     showAlert("Permission denied.", "warning");
-                    // } else if (statusCode && Object.prototype.hasOwnProperty.call(ERROR_STATUS, statusCode)) {
-                    //     showAlert(ERROR_STATUS[statusCode], "danger");
-                    // } else if (statusCode === 400) {
-                    //     showAlert(error.response?.data.detail, "danger");
-                    // } else {
-                    //     showAlert(error.response?.data.detail, "danger");
-                    // }
+                    // const statusCode = error.response?.status;
                 } else {
                     showAlert("Send request failed.", "danger");
                 }

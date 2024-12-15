@@ -21,7 +21,6 @@ const managerSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(getAllReport.fulfilled, (state, action) => {
-                console.log('slice: ', action.payload);
                 if (action.payload.result.length > 0) {
                     state.reportList = action.payload.result.map((report) => ({
                         id: Number(report.id),

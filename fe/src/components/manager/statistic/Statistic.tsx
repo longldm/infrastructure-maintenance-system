@@ -13,7 +13,6 @@ import {
     Legend,
 } from "chart.js";
 
-// Register required Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 function Statistic() {
@@ -27,11 +26,11 @@ function Statistic() {
     useEffect(() => {
         const payload: IGetReportResolvedByMonthPayload = { year: year };
         dispatch(getReportResolvedByMonth(payload));
-    }, [year]);
+    }, [year, dispatch]);
 
     useEffect(() => {
         dispatch(getAverageRatingBySupervisor());
-    }, []);
+    }, [dispatch]);
 
     // Bar Chart Data for Reports Resolved by Month
     const barChartDataReports = {

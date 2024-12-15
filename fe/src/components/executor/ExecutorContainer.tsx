@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { IGetALlReportPayload, IReportItem, IUpdateStagePayload } from "../../types/Report";
@@ -10,7 +10,6 @@ const ExecutorContainer = () => {
   const currentUser = useAppSelector(store => store.auth.currentUser)
   const reportList = useAppSelector(store => store.executor.reportList)
   const userId = localStorage.getItem('userid');
-  // const [executorList, setExecutorList] = useState<IReportItem[]>([]);
 
   const [currentUserId, setCurrentUserId] = useState<string>('');
   const [activeState, setActiveState] = useState<"IN_PROGRESS" | "RESOLVED">("IN_PROGRESS");
@@ -20,20 +19,15 @@ const ExecutorContainer = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const tasksPerPage = 10;
 
-  // useEffect(() => {
-  //   if (currentUserId)
-  //   setExecutorList(reportList.filter(item => item.assigneeId == currentUserId))
-  // }, [reportList])
-
   useEffect(() => {
     dispatch(getUserInfo())
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     if (currentUser && currentUser.id !== currentUserId) {
       setCurrentUserId(currentUser.id)
     }
-  }, [])
+  }, [currentUserId])
 
   useEffect(() => {
     const id = currentUser?.id? currentUser.id : userId
@@ -43,7 +37,7 @@ const ExecutorContainer = () => {
     }
   
     dispatch(getReportForExecutor(payload))
-  }, [currentUserId])
+  }, [currentUserId, dispatch, currentUser.id, userId])
 
   const handleRowClick = (task: IReportItem) => {
     setSelectedTask(task);
@@ -67,9 +61,7 @@ const ExecutorContainer = () => {
   const sortedTasks = (tasks: IReportItem[]) => {
     return [...tasks].sort((a, b) => {
       let comparison = 0;
-      // if (sortBy === "priority") comparison = a.priority - b.priority;
       if (sortBy === "location") comparison = a.location.localeCompare(b.location);
-      // if (sortBy === "equipment") comparison = a.equipment.localeCompare(b.equipment);
       if (sortBy === "time") comparison = new Date(a.time).getTime() - new Date(b.time).getTime();
       return sortDirection === "asc" ? comparison : -comparison;
     });
@@ -180,9 +172,7 @@ const ExecutorContainer = () => {
               </div>
               <div className="modal-body">
                 <p><strong>ID:</strong> {selectedTask.id}</p>
-                {/* <p><strong>Độ ưu tiên:</strong> {selectedTask.priority}</p> */}
                 <p><strong>Địa điểm:</strong> {selectedTask.location}</p>
-                {/* <p><strong>Trang thiết bị:</strong> {selectedTask.equipment}</p> */}
                 <p><strong>Ghi chú:</strong> {selectedTask.note}</p>
                 <p><strong>Thời gian:</strong> {selectedTask.time}</p>
               </div>

@@ -84,7 +84,7 @@ function ManagerReport() {
   };
 
   const getSupervisorName = (id: string) => {
-    const supervisor = supervisorList.find(supervisor => supervisor.id == id);
+    const supervisor = supervisorList.find(supervisor => supervisor.id === id);
     return (supervisor ? supervisor.lastName + ' ' + supervisor.firstName : '');
   }
 
