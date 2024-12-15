@@ -87,8 +87,7 @@ const authSlice = createSlice({
             state.error = '';
             localStorage.removeItem('id_token');
             localStorage.removeItem('refresh_token');
-            sessionStorage.removeItem('id_token');
-            sessionStorage.removeItem('refresh_token');
+            localStorage.removeItem('userid');
         },
         updateUserInfo: (state, action) => {
             state.currentUser = action.payload.result.user;
