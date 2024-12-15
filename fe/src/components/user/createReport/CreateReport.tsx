@@ -89,7 +89,7 @@ function CreateReport() {
                 <textarea
                     className="mt-2 form-control"
                     rows={5}   // Adjust height
-                    placeholder="Ghi chú"
+                    placeholder="Ghi chú sự cố (hỏng gì, hỏng như thế nào, ...)"
                     value = {note || ''}
                     onChange={handleNoteChange}
                 />
@@ -97,7 +97,7 @@ function CreateReport() {
             
             <div className="form-group d-flex justify-content-end">
                 {/* Nút hủy báo cáo */}
-                <button className="btn btn-secondary mr-2" data-bs-toggle="modal" data-bs-target="#cancelReportModal">Hủy báo cáo</button>
+                <button className="btn btn-secondary mr-2" data-bs-toggle="modal" data-bs-target="#cancelReportModal" style={{ marginRight: '5px' }}>Hủy báo cáo</button>
                 {/* Modal xác nhận hủy báo cáo */}
                 <div className="modal fade" id="cancelReportModal" tabIndex={-1} role="dialog" aria-labelledby="cancelReportModalLabel" aria-hidden="true">
                     <div className="modal-dialog" role="document">
@@ -117,7 +117,7 @@ function CreateReport() {
                     </div>
                 </div>
                 {/* Nút tạo báo cáo */}
-                <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createReportModal">Tạo báo cáo</button>
+                <button className="btn btn-primary ml-2" data-bs-toggle="modal" data-bs-target="#createReportModal" style={{ marginLeft: '5px' }}>Tạo báo cáo</button>
                 {/* Modal xác nhận tạo báo cáo */}
                 <div className="modal fade" id="createReportModal" tabIndex={-1} role="dialog" aria-labelledby="createReportModalLabel" aria-hidden="true">
                     <div className="modal-dialog" role="document">
