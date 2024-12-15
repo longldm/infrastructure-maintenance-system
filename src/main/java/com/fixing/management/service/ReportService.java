@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,6 +87,7 @@ public class ReportService {
         User supervisor = userRepository.findById(request.getAssignedSupervisorId())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
+        report.setUpdatedAt(LocalDateTime.now());
         report.setAssignedAccountId(supervisor);
         reportMapper.updateReport(report, request);
 
@@ -123,6 +125,7 @@ public class ReportService {
 
         // Update the stage to the new stage
         report.setStage(newStage);
+        report.setUpdatedAt(LocalDateTime.now());
 
         // Save the updated report
         try {
@@ -184,7 +187,9 @@ public class ReportService {
                 report.getDetails(),  // Report details
                 report.getPriority(),  // Report priority
                 report.getCritical(),  // Critical status
-                report.getStage()  // Report stage
+                report.getStage(),  // Report stage
+                report.getCreatedAt(),  // Report creation timestamp
+                report.getUpdatedAt()
         );
     }
 
@@ -240,13 +245,14 @@ public class ReportService {
     // Helper method to check if the user has the correct roles
     private boolean userHasValidRole(User user) {
         return user.getRoles().stream()
-                .anyMatch(role -> role.getName().equals("ROLE_ADMIN") || role.getName().equals("ROLE_MANAGER"));
+                .anyMatch(role -> role.getName().equals("ADMIN") || role.getName().equals("MANAGER"));
     }
 
 
     public ReportsResolvedByMonthResponse getResolvedReportsByMonth(int year) {
         // Fetch raw data from the repository
         List<Object[]> rawResults = reportRepository.getResolvedReportsByMonth(year);
+        log.info("Raw results: {}", rawResults);
 
         // Convert the raw data into a Map<String, Integer>
         Map<String, Integer> monthlyCounts = rawResults.stream()

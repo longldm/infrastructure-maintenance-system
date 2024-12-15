@@ -14,13 +14,14 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
 
     Optional<List<Report>> findByAccountId(String accountId);
 
+    @Query("SELECT r FROM Report r WHERE r.stage = 'resolved' AND r.assignedAccountId.id = :supervisorId")
     List<Report> findByAssignedAccountId(String supervisorId);
 
-    @Query("SELECT FUNCTION('MONTHNAME', r.updatedAt) AS monthName, COUNT(r.id) AS reportCount " +
+    @Query("SELECT FUNCTION('MONTHNAME', r.updatedAt) AS monthName, COUNT(r.id) AS reportCount, FUNCTION('MONTH', r.updatedAt) AS month " +
             "FROM Report r " +
             "WHERE r.stage = 'resolved' AND FUNCTION('YEAR', r.updatedAt) = :year " +
-            "GROUP BY FUNCTION('MONTHNAME', r.updatedAt) " +
-            "ORDER BY FUNCTION('MONTH', r.updatedAt)")
+            "GROUP BY FUNCTION('MONTHNAME', r.updatedAt), FUNCTION('MONTH', r.updatedAt) " +
+            "ORDER BY month")
     List<Object[]> getResolvedReportsByMonth(@Param("year") int year);
 
     @Query("SELECT r.assignedAccountId.id, AVG(r.feedbackRatings) " +

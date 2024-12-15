@@ -5,6 +5,8 @@ import com.fixing.management.entity.Report;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,4 +21,6 @@ public class ReportResponse {
     private Report.Priority priority;
     private Boolean critical;
     private Report.Stage stage = Report.Stage.OPEN;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

@@ -52,7 +52,7 @@ public class ReportManagementController {
                 .build();
     }
 
-    @PostMapping("/update-stage")
+    @PutMapping("/update-stage")
     ApiResponse<ReportResponse> updateReportStage(@RequestBody @Valid ReportUpdateRequest request) {
         // Call the service to update the report's stage using the data from the request body
         return ApiResponse.<ReportResponse>builder()
