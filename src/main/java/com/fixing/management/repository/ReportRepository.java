@@ -30,10 +30,10 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
             "GROUP BY r.assignedAccountId.id")
     List<Object[]> getAverageRatingBySupervisor();
 
-    @Query("SELECT r.assignedAccountId.id, FUNCTION('MONTHNAME', r.updatedAt) AS monthName, COUNT(r.id) AS reportCount " +
+    @Query("SELECT r.assignedAccountId.id, FUNCTION('MONTHNAME', r.updatedAt) AS monthName, COUNT(r.id) AS reportCount, FUNCTION('MONTH', r.updatedAt) AS month " +
             "FROM Report r " +
             "WHERE r.stage = 'resolved' AND r.assignedAccountId IS NOT NULL AND FUNCTION('YEAR', r.updatedAt) = :year " +
-            "GROUP BY r.assignedAccountId.id, FUNCTION('MONTHNAME', r.updatedAt) " +
-            "ORDER BY r.assignedAccountId.id, FUNCTION('MONTH', r.updatedAt)")
+            "GROUP BY r.assignedAccountId.id, FUNCTION('MONTHNAME', r.updatedAt), FUNCTION('MONTH', r.updatedAt) " +
+            "ORDER BY r.assignedAccountId.id, month")
     List<Object[]> getReportCountBySupervisorAndMonth(@Param("year") int year);
 }

@@ -112,7 +112,7 @@ public class ReportManagementController {
 
     @PostMapping("/reports-processed-by-supervisor")
     public ReportsProcessedBySupervisorResponse getReportCountBySupervisorAndMonth(
-            @RequestBody @Valid ReportsProcessedBySupervisorRequest request) {
+            @RequestBody @Valid  ReportsProcessedBySupervisorRequest request) {
         // Call the service to get the report count by supervisor and month
         return reportService.getReportCountBySupervisorAndMonth(request.getYear());
     }

@@ -283,6 +283,7 @@ public class ReportService {
 
 
     public ReportsProcessedBySupervisorResponse getReportCountBySupervisorAndMonth(int year) {
+        log.info("Fetching report counts by supervisor and month for year: {}", year);
         // Fetch raw data from the repository (only DONE reports)
         List<Object[]> rawResults = reportRepository.getReportCountBySupervisorAndMonth(year);
 
