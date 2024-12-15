@@ -1,4 +1,4 @@
-import { ReportItem } from "../../../types/Report";
+import { IReportItem } from "../../../types/Report";
 import React, { useState } from 'react';
 
 function CreateReport() {
