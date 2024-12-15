@@ -5,8 +5,8 @@ import lombok.Data;
 
 import java.util.List;
 
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
 public class ReportsProcessedBySupervisorResponse {
-    private List<SupervisorMonthlyReportCount> supervisorReportCounts;  // List of supervisors and their monthly report counts
+    private List<SupervisorReportCount> supervisorReportCounts;  // List of supervisors and their total report counts
 }

@@ -1,4 +1,5 @@
 package com.fixing.management.service;
+import java.util.*;
 
 import com.fixing.management.dto.request.ReportCreationRequest;
 import com.fixing.management.dto.request.ReportNoteCreationRequest;
@@ -24,10 +25,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -254,16 +251,28 @@ public class ReportService {
         List<Object[]> rawResults = reportRepository.getResolvedReportsByMonth(year);
         log.info("Raw results: {}", rawResults);
 
-        // Convert the raw data into a Map<String, Integer>
+        // Convert the raw data into a Map<String, Integer> (monthName -> reportCount)
         Map<String, Integer> monthlyCounts = rawResults.stream()
                 .collect(Collectors.toMap(
                         result -> (String) result[0],  // Month name
-                        result -> ((Number) result[1]).intValue()  // Report count
+                        result -> ((Number) result[1]).intValue(),  // Report count
+                        (oldValue, newValue) -> oldValue,  // Handle duplicates if they occur (unlikely in this case)
+                        LinkedHashMap::new  // Ensure the order matches the query
                 ));
+
+        // Ensure all months are present with default value 0
+        List<String> allMonths = Arrays.asList(
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        );
+
+        // Fill missing months with 0
+        allMonths.forEach(month -> monthlyCounts.putIfAbsent(month, 0));
 
         // Return the formatted response
         return new ReportsResolvedByMonthResponse(monthlyCounts);
     }
+
 
     public ReportsAverageRatingResponse getAverageRatingBySupervisor() {
         // Fetch raw data from the repository
@@ -273,7 +282,7 @@ public class ReportService {
         List<SupervisorRatingResponse> supervisorRatings = rawResults.stream()
                 .map(result -> new SupervisorRatingResponse(
                         (String) result[0], // Supervisor ID
-                        (Double) result[1]   // Average rating
+                        (Double) result[1]   // Average rating (no need to check for null, handled by the query)
                 ))
                 .collect(Collectors.toList());
 
@@ -283,31 +292,37 @@ public class ReportService {
 
 
     public ReportsProcessedBySupervisorResponse getReportCountBySupervisorAndMonth(int year) {
-        log.info("Fetching report counts by supervisor and month for year: {}", year);
-        // Fetch raw data from the repository (only DONE reports)
+        log.info("Fetching report counts by supervisor for year: {}", year);
+
+        // Fetch raw data from the repository (only 'resolved' reports for the given year)
         List<Object[]> rawResults = reportRepository.getReportCountBySupervisorAndMonth(year);
 
-        // Process the raw data into a map (supervisor ID -> Map<month, count>)
-        Map<String, Map<String, Integer>> supervisorMonthlyReportCounts = new HashMap<>();
+        // Process the raw data into a map (supervisor ID -> report count)
+        Map<String, Integer> supervisorReportCounts = new HashMap<>();
 
+        // Process the raw data and group by supervisor
         for (Object[] result : rawResults) {
             String supervisorId = (String) result[0];  // Supervisor ID
-            String monthName = (String) result[1];     // Month name (e.g., "January")
-            Integer reportCount = ((Number) result[2]).intValue();  // Report count
+            Integer reportCount = ((Number) result[1]).intValue();  // Report count
 
             // Initialize the map for the supervisor if it doesn't exist
-            supervisorMonthlyReportCounts
-                    .computeIfAbsent(supervisorId, k -> new HashMap<>())
-                    .put(monthName, reportCount);
+            supervisorReportCounts.put(supervisorId, reportCount);
         }
 
-        // Map the data into the response DTO
-        List<SupervisorMonthlyReportCount> supervisorReportCounts = supervisorMonthlyReportCounts.entrySet().stream()
-                .map(entry -> new SupervisorMonthlyReportCount(entry.getKey(), entry.getValue()))
+        // Ensure supervisors with no reports are included with a count of 0
+        List<String> allSupervisors = userRepository.findSupervisors(); // Fetch all supervisors to ensure they are included
+        allSupervisors.forEach(supervisorId -> supervisorReportCounts.putIfAbsent(supervisorId, 0)); // Add supervisors with 0 reports
+
+        // Map the data into the response DTO (SupervisorReportCount)
+        List<SupervisorReportCount> supervisorReportCountList = supervisorReportCounts.entrySet().stream()
+                .map(entry -> new SupervisorReportCount(entry.getKey(), entry.getValue())) // Return the report count for each supervisor
                 .collect(Collectors.toList());
 
-        return new ReportsProcessedBySupervisorResponse(supervisorReportCounts);
+        // Return the response DTO with the supervisor report counts
+        return new ReportsProcessedBySupervisorResponse(supervisorReportCountList);
     }
+
+
 
 
 
