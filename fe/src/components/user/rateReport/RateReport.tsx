@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ReportItem } from '../../../types/Report';
+import { ReportItem } from '../../../types/ReportForRating';
 
 const data: { [key: string]: ReportItem[] } = {
   pending: [
@@ -219,6 +219,7 @@ function RateReport() {
                 <p><strong>Đánh giá:</strong> {ratings !== null ? ratings : 'No rating'}</p>
                 <button className="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#rateReportModal">Đánh giá</button>
                 {/* Modal đánh giá báo cáo */}
+                {/* TODO: fix Modal.getInstance returns null */}
                 <div className="modal fade" id="rateReportModal" tabIndex={-1} role="dialog" aria-labelledby="rateReportModalLabel" aria-hidden="true">
                   <div className="modal-dialog" role="document">
                     <div className="modal-content">
