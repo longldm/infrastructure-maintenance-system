@@ -32,7 +32,7 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
 
     @Query("SELECT r.assignedAccountId.id, FUNCTION('MONTHNAME', r.updatedAt) AS monthName, COUNT(r.id) AS reportCount " +
             "FROM Report r " +
-            "WHERE r.stage = 'DONE' AND r.assignedAccountId IS NOT NULL AND FUNCTION('YEAR', r.updatedAt) = :year " +
+            "WHERE r.stage = 'resolved' AND r.assignedAccountId IS NOT NULL AND FUNCTION('YEAR', r.updatedAt) = :year " +
             "GROUP BY r.assignedAccountId.id, FUNCTION('MONTHNAME', r.updatedAt) " +
             "ORDER BY r.assignedAccountId.id, FUNCTION('MONTH', r.updatedAt)")
     List<Object[]> getReportCountBySupervisorAndMonth(@Param("year") int year);
