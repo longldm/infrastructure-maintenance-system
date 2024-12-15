@@ -65,14 +65,14 @@ public class ReportService {
         return reportMapper.toReportResponse(report);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'REPORTER_ROLE')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'REPORTER', 'SUPERVISOR')")
     public ReportResponse getReport(int id) {
         return reportMapper.toReportResponse(
                 reportRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND))
         );
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'REPORTER_ROLE')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'REPORTER', 'SUPERVISOR')")
     public List<ReportResponse> getReportByAccountId(String userId) {
         List<Report> reports = reportRepository.findByAccountId(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.REPORT_NOT_FOUND));
