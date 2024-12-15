@@ -1,61 +1,21 @@
 import { useEffect, useState } from "react";
-import { ReportItem } from "../../../types/Report";
-
-const data: { [key: string]: ReportItem[] } = {
-  pending: [
-    { id: '1', priority: 'High', location: 'Office A', equipment: 'Printer', assignee: 'John Doe', note: 'Replace cartridge', time: '2024-12-03 10:00 AM', status: 'Pending' },
-    { id: '2', priority: 'Low', location: 'Office B', equipment: 'Laptop', assignee: 'Jane Smith', note: 'Repair screen', time: '2024-12-01 9:00 AM', status: 'Pending' },
-    { id: '3', priority: 'Medium', location: 'Office C', equipment: 'Projector', assignee: 'Tom Johnson', note: 'Clean lens', time: '2024-12-02 11:00 AM', status: 'Pending' },
-    { id: '4', priority: 'High', location: 'Office A', equipment: 'Scanner', assignee: 'Alice Smith', note: 'Replace toner', time: '2024-12-04 1:00 PM', status: 'Pending' },
-    { id: '5', priority: 'Low', location: 'Office B', equipment: 'Monitor', assignee: 'Michael Brown', note: 'Calibrate screen', time: '2024-12-05 9:00 AM', status: 'Pending' },
-    { id: '6', priority: 'High', location: 'Office C', equipment: 'Desktop', assignee: 'Emily Davis', note: 'Check power supply', time: '2024-12-06 10:00 AM', status: 'Pending' },
-    { id: '7', priority: 'Medium', location: 'Office A', equipment: 'Air conditioner', assignee: 'John Doe', note: 'Clean filter', time: '2024-12-03 2:00 PM', status: 'Pending' },
-    { id: '8', priority: 'Low', location: 'Office B', equipment: 'Keyboard', assignee: 'Jane Smith', note: 'Replace keys', time: '2024-12-02 4:00 PM', status: 'Pending' },
-    { id: '9', priority: 'High', location: 'Office C', equipment: 'Laptop', assignee: 'Tom Johnson', note: 'Upgrade RAM', time: '2024-12-01 10:00 AM', status: 'Pending' },
-    { id: '10', priority: 'Medium', location: 'Office A', equipment: 'Phone', assignee: 'Alice Smith', note: 'Check network', time: '2024-12-04 3:00 PM', status: 'Pending' },
-    { id: '11', priority: 'Low', location: 'Office B', equipment: 'Projector', assignee: 'Michael Brown', note: 'Calibrate image', time: '2024-12-03 5:00 PM', status: 'Pending' },
-    { id: '12', priority: 'High', location: 'Office C', equipment: 'Printer', assignee: 'Emily Davis', note: 'Refill ink', time: '2024-12-06 8:00 AM', status: 'Pending' },
-    { id: '13', priority: 'Medium', location: 'Office A', equipment: 'Monitor', assignee: 'John Doe', note: 'Adjust brightness', time: '2024-12-02 11:30 AM', status: 'Pending' },
-    { id: '14', priority: 'Low', location: 'Office B', equipment: 'Speaker', assignee: 'Jane Smith', note: 'Fix audio output', time: '2024-12-01 8:00 PM', status: 'Pending' },
-    { id: '15', priority: 'High', location: 'Office C', equipment: 'Camera', assignee: 'Tom Johnson', note: 'Replace battery', time: '2024-12-05 10:00 AM', status: 'Pending' },
-    { id: '16', priority: 'Low', location: 'Office A', equipment: 'Microphone', assignee: 'Alice Smith', note: 'Test connection', time: '2024-12-04 2:30 PM', status: 'Pending' },
-    { id: '17', priority: 'High', location: 'Office B', equipment: 'Fan', assignee: 'Michael Brown', note: 'Oil motor', time: '2024-12-03 7:00 AM', status: 'Pending' },
-    { id: '18', priority: 'Medium', location: 'Office C', equipment: 'Laptop', assignee: 'Emily Davis', note: 'Upgrade OS', time: '2024-12-06 9:30 AM', status: 'Pending' },
-    { id: '19', priority: 'Low', location: 'Office A', equipment: 'Server', assignee: 'John Doe', note: 'Check storage', time: '2024-12-02 8:00 AM', status: 'Pending' },
-    { id: '20', priority: 'High', location: 'Office B', equipment: 'Tablet', assignee: 'Jane Smith', note: 'Check connectivity', time: '2024-12-01 12:00 PM', status: 'Pending' },
-    { id: '21', priority: 'Low', location: 'Office C', equipment: 'Router', assignee: 'Tom Johnson', note: 'Replace cables', time: '2024-12-03 3:30 PM', status: 'Pending' },
-    { id: '22', priority: 'High', location: 'Office A', equipment: 'Light', assignee: 'Alice Smith', note: 'Replace bulb', time: '2024-12-04 5:00 PM', status: 'Pending' },
-    { id: '23', priority: 'Medium', location: 'Office B', equipment: 'Refrigerator', assignee: 'Michael Brown', note: 'Check cooling', time: '2024-12-02 2:00 PM', status: 'Pending' },
-    { id: '24', priority: 'Low', location: 'Office C', equipment: 'Lock', assignee: 'Emily Davis', note: 'Lubricate lock', time: '2024-12-05 11:00 AM', status: 'Pending' },
-    { id: '25', priority: 'High', location: 'Office A', equipment: 'Desk', assignee: 'John Doe', note: 'Adjust height', time: '2024-12-03 12:00 PM', status: 'Pending' },
-    { id: '26', priority: 'Medium', location: 'Office B', equipment: 'Couch', assignee: 'Jane Smith', note: 'Fix leg', time: '2024-12-01 2:30 PM', status: 'Pending' },
-    { id: '27', priority: 'Low', location: 'Office C', equipment: 'Whiteboard', assignee: 'Tom Johnson', note: 'Clean surface', time: '2024-12-06 7:00 AM', status: 'Pending' },
-    { id: '28', priority: 'High', location: 'Office A', equipment: 'Fan', assignee: 'Alice Smith', note: 'Replace blades', time: '2024-12-04 9:00 AM', status: 'Pending' },
-    { id: '29', priority: 'Low', location: 'Office B', equipment: 'Table', assignee: 'Michael Brown', note: 'Reassemble frame', time: '2024-12-05 1:00 PM', status: 'Pending' },
-    { id: '30', priority: 'Medium', location: 'Office C', equipment: 'Chair', assignee: 'Emily Davis', note: 'Fix armrest', time: '2024-12-03 6:00 PM', status: 'Pending' },
-    { id: '31', priority: 'High', location: 'Office A', equipment: 'Projector', assignee: 'John Doe', note: 'Adjust settings', time: '2024-12-02 12:00 PM', status: 'Pending' },
-    { id: '32', priority: 'Low', location: 'Office B', equipment: 'Phone', assignee: 'Jane Smith', note: 'Install app', time: '2024-12-04 6:00 PM', status: 'Pending' },
-    { id: '33', priority: 'Medium', location: 'Office C', equipment: 'Monitor', assignee: 'Tom Johnson', note: 'Check HDMI port', time: '2024-12-01 3:00 PM', status: 'Pending' },
-    { id: '34', priority: 'High', location: 'Office A', equipment: 'Laptop', assignee: 'Alice Smith', note: 'Install software', time: '2024-12-02 10:00 AM', status: 'Pending' },
-    { id: '35', priority: 'Low', location: 'Office B', equipment: 'Printer', assignee: 'Michael Brown', note: 'Refill paper', time: '2024-12-05 8:00 AM', status: 'Pending' }
-  ],
-  ongoing: [
-    { id: '36', priority: 'Low', location: 'Office B', equipment: 'Printer', assignee: 'Michael Brown', note: 'Refill paper', time: '2024-12-05 8:00 AM', status: 'Ongoing' }
-  ],
-  processed: [
-    { id: '37', priority: 'Low', location: 'Office B', equipment: 'Printer', assignee: 'Michael Brown', note: 'Refill paper', time: '2024-12-05 8:00 AM', status: 'Processed' }
-  ]
-};
-
-const executorsPool: { [key: string]: string[] } = {
-  'Office A': ['John Doe', 'Alice Smith'],
-  'Office B': ['Jane Smith', 'Michael Brown'],
-  'Office C': ['Tom Johnson', 'Emily Davis'],
-};
+import { IAssignJobPayload, IReportItem } from "../../../types/Report";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { assignJobRequest } from "./managerApi";
 
 function ManagerReport() {
+  const dispatch = useAppDispatch()
+  const reportList = useAppSelector(store => store.manager.reportList)
+  const supervisorList = useAppSelector(store => store.manager.supervisorList)
+  const currentUser = useAppSelector(store => store.auth.currentUser)
+
+  // report list
+  const pendingList = reportList.filter(item => item.status === 'OPEN');
+  const onGoingList = reportList.filter(item => item.status === 'IN_PROGRESS');
+  const processedList = reportList.filter(item => item.status === 'RESOLVED');
+
   const [activeSection, setActiveSection] = useState<string>('pending');
-  const [selectedItem, setSelectedItem] = useState<ReportItem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<IReportItem | null>(null);
   const [selectedAssignee, setSelectedAssignee] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [sortColumn, setSortColumn] = useState<string>('id');
@@ -66,9 +26,9 @@ function ManagerReport() {
     setCurrentPage(1);
   }, [activeSection])
 
-  const handleRowClick = (item: ReportItem) => {
+  const handleRowClick = (item: IReportItem) => {
     setSelectedItem(item);
-    setSelectedAssignee(item.assignee);
+    setSelectedAssignee(item.assigneeId);
   };
 
   const closeModal = () => {
@@ -81,6 +41,21 @@ function ManagerReport() {
 
   const assignJob = () => {
     // TODO: Implement assign job logic
+    const payload: IAssignJobPayload = {
+      id: selectedItem!.id.toString(),
+      accountId: currentUser.id,
+      assignedSupervisorId: selectedAssignee,
+      stage: 'IN_PROGRESS'
+    };
+    dispatch(assignJobRequest(payload));
+    closeModal()
+  };
+
+  // Dynamically get the current list based on active section
+  const data: Record<string, IReportItem[]> = {
+    pending: pendingList,
+    ongoing: onGoingList,
+    processed: processedList
   };
 
   const totalReports = data[activeSection]?.length || 0;
@@ -88,8 +63,8 @@ function ManagerReport() {
 
   // Sort the data based on selected column and order
   const sortedReports = [...data[activeSection] || []].sort((a, b) => {
-    const aValue = a[sortColumn as keyof ReportItem];
-    const bValue = b[sortColumn as keyof ReportItem];
+    const aValue = a[sortColumn as keyof IReportItem];
+    const bValue = b[sortColumn as keyof IReportItem];
 
     if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
     if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
@@ -107,6 +82,24 @@ function ManagerReport() {
       setSortOrder('asc');
     }
   };
+
+  const getSupervisorName = (id: string) => {
+    const supervisor = supervisorList.find(supervisor => supervisor.id == id);
+    return (supervisor ? supervisor.lastName + ' ' + supervisor.firstName : '');
+  }
+
+  const getCurrentStatus = (status: string) => {
+    switch (status) {
+      case 'OPEN':
+        return 'Chờ xử lý';
+      case 'IN_PROGRESS':
+        return 'Đang xử lý';
+      case 'RESOLVED':
+        return 'Đã xử lý';
+      default:
+        return '';
+    }
+  }
 
   return (
     <div className="container mt-4">
@@ -137,14 +130,14 @@ function ManagerReport() {
         <table className="table table-bordered">
           <thead className="table-light">
             <tr>
-              <th onClick={() => handleSort('id')}>ID {sortColumn === 'id' && (sortOrder === 'asc' ? '↑' : '↓')}</th>
-              <th onClick={() => handleSort('priority')}>Độ ưu tiên {sortColumn === 'priority' && (sortOrder === 'asc' ? '↑' : '↓')}</th>
-              <th onClick={() => handleSort('location')}>Địa điểm {sortColumn === 'location' && (sortOrder === 'asc' ? '↑' : '↓')}</th>
-              <th onClick={() => handleSort('equipment')}>Trang thiết bị {sortColumn === 'equipment' && (sortOrder === 'asc' ? '↑' : '↓')}</th>
-              <th onClick={() => handleSort('assignee')}>Người phụ trách {sortColumn === 'assignee' && (sortOrder === 'asc' ? '↑' : '↓')}</th>
+              <th onClick={() => handleSort('id')}>ID</th>
+              {/* <th onClick={() => handleSort('priority')}>Độ ưu tiên {sortColumn === 'priority' && (sortOrder === 'asc' ? '↑' : '↓')}</th> */}
+              <th onClick={() => handleSort('location')}>Địa điểm </th>
+              {/* <th onClick={() => handleSort('equipment')}>Trang thiết bị {sortColumn === 'equipment' && (sortOrder === 'asc' ? '↑' : '↓')}</th> */}
               <th>Ghi chú</th>
-              <th onClick={() => handleSort('time')}>Thời gian {sortColumn === 'time' && (sortOrder === 'asc' ? '↑' : '↓')}</th>
-              <th>Trạng thái xử lý</th>
+              <th onClick={() => handleSort('assignee')}>Người phụ trách </th>
+              <th onClick={() => handleSort('time')}>Thời gian </th>
+              {/* <th>Trạng thái xử lý</th> */}
             </tr>
           </thead>
           <tbody>
@@ -152,13 +145,15 @@ function ManagerReport() {
               currentReports.map((item) => (
                 <tr key={item.id} onClick={() => handleRowClick(item)} style={{ cursor: 'pointer' }}>
                   <td>{item.id}</td>
-                  <td>{item.priority}</td>
+                  {/* <td>{item.priority}</td> */}
                   <td>{item.location}</td>
-                  <td>{item.equipment}</td>
-                  <td>{item.assignee}</td>
+                  {/* <td>{item.equipment}</td> */}
                   <td>{item.note}</td>
+                  <td>
+                    {item.assigneeId === '' ? 'Chưa phân công' : getSupervisorName(item.assigneeId)}
+                  </td>
                   <td>{item.time}</td>
-                  <td>{item.status}</td>
+                  {/* <td>{item.status}</td> */}
                 </tr>
               ))
             ) : (
@@ -204,16 +199,16 @@ function ManagerReport() {
               </div>
               <div className="modal-body">
                 <p><strong>ID:</strong> {selectedItem.id}</p>
-                <p><strong>Độ ưu tiên:</strong> {selectedItem.priority}</p>
+                {/* <p><strong>Độ ưu tiên:</strong> {selectedItem.priority}</p> */}
                 <p><strong>Địa điểm:</strong> {selectedItem.location}</p>
-                <p><strong>Trang thiết bị:</strong> {selectedItem.equipment}</p>
+                {/* <p><strong>Trang thiết bị:</strong> {selectedItem.equipment}</p> */}
                 <p><strong>Ghi chú:</strong> {selectedItem.note}</p>
                 <p><strong>Thời gian:</strong> {selectedItem.time}</p>
-                <p><strong>Trạng thái xử lý:</strong> {selectedItem.status}</p>
+                <p><strong>Trạng thái xử lý:</strong> {getCurrentStatus(selectedItem.status)}</p>
                 <div className="mb-3">
                   <label htmlFor="assigneeSelect" className="form-label"><strong>Người phụ trách:</strong></label>
-                  {selectedItem.status === 'Processed' ? (
-                    <p>{selectedItem.assignee}</p>
+                  {selectedItem.status === 'RESOLVED' ? (
+                    <p>{getSupervisorName(selectedItem.assigneeId)}</p>
                   ) : (
                     <select
                       id="assigneeSelect"
@@ -221,9 +216,10 @@ function ManagerReport() {
                       value={selectedAssignee}
                       onChange={handleAssigneeChange}
                     >
-                      {executorsPool[selectedItem.location]?.map((executor) => (
-                        <option key={executor} value={executor}>
-                          {executor}
+                      <option value=""></option> 
+                      {supervisorList.map((executor) => (
+                        <option key={executor.id} value={executor.id}>
+                          {executor.firstName + " " + executor.lastName}
                         </option>
                       ))}
                     </select>
@@ -238,7 +234,7 @@ function ManagerReport() {
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={() => alert(`Assignee changed to ${selectedAssignee}`)}
+                    onClick={assignJob}
                   >
                     Save Changes
                   </button>

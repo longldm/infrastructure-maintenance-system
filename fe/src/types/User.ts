@@ -27,3 +27,21 @@ export interface IUser {
         permissions: string[]
     }
 }
+
+export interface IGetAllUsersResponse {
+    code: number;
+    result: IUserListResponse[];
+}
+
+export interface IUserListResponse {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    dob: string;
+    roles: [{
+        name: string,
+        description: string
+        permissions: string[]
+    }]
+}

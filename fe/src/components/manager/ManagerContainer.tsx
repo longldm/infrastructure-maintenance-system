@@ -1,10 +1,36 @@
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import ManagerReport from "./manageReport/ManageReport";
 import Statistic from "./statistic/Statistic";
 import Response from "./response/Response";
+import { IGetALlReportPayload } from "../../types/Report";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { getAllReport, getAllUser } from "./manageReport/managerApi";
+import { getUserInfo } from "../auth/loginApi";
+import { showAlert } from "../../utils/showAlert";
 
 function ManagerContainer() {
+    const dispatch = useAppDispatch()
     const [activeSection, setActiveSection] = useState<string>('section1');
+    const currentUser = useAppSelector(store => store.auth.currentUser)
+    const [currentUserId, setCurrentUserId] = useState<string>('');
+
+    useLayoutEffect(() => {
+        const payload: IGetALlReportPayload = {
+            accountId: currentUser.id
+        }
+        dispatch(getUserInfo())
+        dispatch(getAllReport(payload))
+    }, [currentUserId])
+
+    useLayoutEffect(() => {
+        dispatch(getAllUser())
+    }, [])
+
+    useLayoutEffect(() => {
+        if (currentUser && currentUser.id !== currentUserId) {
+            setCurrentUserId(currentUser.id)
+        }
+    }, [currentUser])
 
     return (
         <>
@@ -25,12 +51,6 @@ function ManagerContainer() {
                         >
                             Thống kê
                         </button>
-                        <button
-                            className={`btn w-100 ${activeSection === 'section3' ? 'btn-primary' : 'btn-outline-primary'}`}
-                            onClick={() => setActiveSection('section3')}
-                        >
-                            Phản hồi
-                        </button>
                     </div>
 
                     {/* Content Area */}
@@ -45,12 +65,6 @@ function ManagerContainer() {
                             <div>
                                 <h3>Thống kê</h3>
                                 <Statistic />
-                            </div>
-                        )}
-                        {activeSection === 'section3' && (
-                            <div>
-                                <h3>Phản hồi</h3>
-                                <Response />
                             </div>
                         )}
                     </div>

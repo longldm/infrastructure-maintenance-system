@@ -9,26 +9,30 @@ import AdminContainer from './components/admin/AdminContainer';
 import Login from './components/auth/Login';
 import BaseLayout from './components/common/BaseLayout';
 import Home from './components/home/Home';
+import { ReactNotifications } from 'react-notifications-component';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<ThemeLoader />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Home />} />
-          <Route element={<PrivateRoute />}>
-            <Route element={<BaseLayout />}>
-              <Route path="/user" element={<UserContainer />} />
-              <Route path="/manager" element={<ManagerContainer />} />
-              <Route path="/executor" element={<ExecutorContainer />} />
-              <Route path="/admin" element={<AdminContainer />} />
+    <>
+     <ReactNotifications />
+      <BrowserRouter>
+        <Routes>
+          <Route element={<ThemeLoader />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home />} />
+            <Route element={<PrivateRoute />}>
+              <Route element={<BaseLayout />}>
+                <Route path="/user" element={<UserContainer />} />
+                <Route path="/manager" element={<ManagerContainer />} />
+                <Route path="/executor" element={<ExecutorContainer />} />
+                <Route path="/admin" element={<AdminContainer />} />
+              </Route>
             </Route>
+            <Route element={<Login />} />
           </Route>
-          <Route element={<Login />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

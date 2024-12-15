@@ -39,15 +39,15 @@ export const axiosBaseQuery = (): BaseQueryFn<AxiosBaseQueryArgs, unknown, unkno
         if (axios.isAxiosError(axiosError)) {
             // let err = axiosError as AxiosError;
             const statusCode = axiosError.response?.status;
-            if (statusCode === axios.HttpStatusCode.Forbidden) {
-                showAlert("Permission denied.", "warning");
-            } else if (statusCode && Object.prototype.hasOwnProperty.call(ERROR_STATUS, statusCode)) {
-                showAlert(ERROR_STATUS[statusCode], "danger");
-            } else if (statusCode === 400) {
-                showAlert(axiosError.response?.data.detail, "danger");
-            } else {
-                showAlert(axiosError.response?.data.detail, "danger");
-            }
+            // if (statusCode === axios.HttpStatusCode.Forbidden) {
+            //     showAlert("Permission denied.", "warning");
+            // } else if (statusCode && Object.prototype.hasOwnProperty.call(ERROR_STATUS, statusCode)) {
+            //     showAlert(ERROR_STATUS[statusCode], "danger");
+            // } else if (statusCode === 400) {
+            //     showAlert(axiosError.response?.data.detail, "danger");
+            // } else {
+            //     showAlert(axiosError.response?.data.detail, "danger");
+            // }
         } else {
             showAlert("Send request failed.", "danger");
         }

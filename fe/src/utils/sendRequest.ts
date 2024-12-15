@@ -44,15 +44,15 @@ export const sendRequest = async (url: string, options?: Partial<RequestOptions>
             if (!options?.defineAlert) {
                 if (axios.isAxiosError(error)) {
                     const statusCode = error.response?.status;
-                    if (statusCode === axios.HttpStatusCode.Forbidden) {
-                        showAlert("Permission denied.", "warning");
-                    } else if (statusCode && Object.prototype.hasOwnProperty.call(ERROR_STATUS, statusCode)) {
-                        showAlert(ERROR_STATUS[statusCode], "danger");
-                    } else if (statusCode === 400) {
-                        showAlert(error.response?.data.detail, "danger");
-                    } else {
-                        showAlert(error.response?.data.detail, "danger");
-                    }
+                    // if (statusCode === axios.HttpStatusCode.Forbidden) {
+                    //     showAlert("Permission denied.", "warning");
+                    // } else if (statusCode && Object.prototype.hasOwnProperty.call(ERROR_STATUS, statusCode)) {
+                    //     showAlert(ERROR_STATUS[statusCode], "danger");
+                    // } else if (statusCode === 400) {
+                    //     showAlert(error.response?.data.detail, "danger");
+                    // } else {
+                    //     showAlert(error.response?.data.detail, "danger");
+                    // }
                 } else {
                     showAlert("Send request failed.", "danger");
                 }

@@ -17,7 +17,7 @@ export const loginRequest = createAsyncThunk<ILogInResponse, ILoginPayload>(
     'api/login',
     async (payload: ILoginPayload, thunkApi) => {
         return await sendRequest(
-            "https://259b-42-113-16-68.ngrok-free.app/identity/auth/token",
+            "/auth/token",
             {
                 payload: payload ,
                 method: "POST",
@@ -31,7 +31,7 @@ export const getUserInfo = createAsyncThunk<IGetUserInfoResponse, void>(
     'api/user-info',
     async (thunkApi) => {
         return await sendRequest(
-            "https://259b-42-113-16-68.ngrok-free.app/identity/users/my-info",
+            "/users/my-info",
             {
                 method: "GET",
                 thunkApi,

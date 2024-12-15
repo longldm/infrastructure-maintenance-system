@@ -10,23 +10,10 @@ function Login() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState<string | null>(null);
   
     const handleLogin = async (e: React.FormEvent) => {
       e.preventDefault();
-  
-      if (!username || !password) {
-        setError('Vui lòng nhập tên đăng nhập và mật khẩu.');
-        return;
-      }
-  
-      // Handle login logic here
-    //   alert(`Đăng nhập thành công với tài khoản: ${username}`);
-      setError(null); // Clear errors
-      // const payload: ILoginPayload = { 
-      //   "username": "reporter1", 
-      //   "password": "duong2002" 
-      // };
+      localStorage.removeItem('userid');
       const res = await dispatch(loginRequest({username: username.trim(), password: password.trim()}));
       if (res.meta.requestStatus === 'fulfilled') {
         // showAlert(`Đăng nhập thành công`, 'success');
@@ -70,10 +57,6 @@ function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-  
-              {/* Error Message */}
-              {error && <div className="alert alert-danger">{error}</div>}
-  
               {/* Login Button */}
               <div className="d-grid">
                 <button type="submit" className="btn btn-primary">

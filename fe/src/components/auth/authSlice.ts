@@ -3,6 +3,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { getUserInfo, loginRequest } from './loginApi';
 import { IUser } from '../../types/User';
+import { showAlert } from '../../utils/showAlert';
 
 
 // Try to load user info from local storage
@@ -96,16 +97,19 @@ const authSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(loginRequest.fulfilled, (state, action) => {
-            if (action.payload) {
-                state.isAuthenticated = true;
-                localStorage.setItem('id_token', action.payload.result.token);
-                localStorage.setItem('refresh_token', action.payload.result.token);
-                axios.defaults.headers.common['Authorization'] = "Bearer " + action.payload.result.token;
-                state.error = '';
-            }
+                if (action.payload) {
+                    state.isAuthenticated = true;
+                    localStorage.setItem('id_token', action.payload.result.token);
+                    localStorage.setItem('refresh_token', action.payload.result.token);
+                    axios.defaults.headers.common['Authorization'] = "Bearer " + action.payload.result.token;
+                    state.error = '';
+                    showAlert('Đăng nhập thành công', 'success');
+                }
+            })
+            .addCase(loginRequest.rejected, (state, action) => {
+                showAlert('Sai tài khoản hoặc mật khẩu', 'danger')
             })
             .addCase(getUserInfo.fulfilled, (state, action) => {
-                console.log('action.payload', action.payload);
                 state.currentUser.id = action.payload.result.id;
                 state.currentUser.username = action.payload.result.username;
                 state.currentUser.firstName = action.payload.result.firstName;
@@ -123,6 +127,7 @@ const authSlice = createSlice({
                 } else if (action.payload.result.roles[0].name === 'ADMIN') {
                     state.currentUser.role.id = 4;
                 }
+                localStorage.setItem('userid', state.currentUser.id)
             })
 
     }

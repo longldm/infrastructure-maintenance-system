@@ -1,12 +1,18 @@
 import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
 import themeSlice from '../components/theme/themeSlice';
 import authSlice from '../components/auth/authSlice';
+import managerSlice from '../components/manager/manageReport/managerSlice';
+import executorSlice from '../components/executor/executorSlice';
+import statisticSlice from '../components/manager/statistic/statisticSlice';
 
 
 export const store = configureStore({
   reducer: {
     theme: themeSlice,
     auth: authSlice,
+    manager: managerSlice,
+    executor: executorSlice,
+    statistic: statisticSlice,
   },
 });
 
