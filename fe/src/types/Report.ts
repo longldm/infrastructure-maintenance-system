@@ -105,3 +105,16 @@ export interface ISupervisorRating {
 export interface IGetAverageRatingResponse {
   supervisorRatings: ISupervisorRating[]
 }
+
+export interface ICreateReportPayload {
+  reporterId: string;
+  location: string;
+  equipment: string;
+  note: string;
+}
+
+export interface ICreateReportResponse {
+  code: number;
+  message: string;
+  result: IReportItem;
+}
