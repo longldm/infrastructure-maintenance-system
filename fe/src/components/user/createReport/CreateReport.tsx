@@ -2,45 +2,50 @@ import { IReportItem } from "../../../types/Report";
 import React, { useState } from 'react';
 
 function CreateReport() {
-    const [location, setLocation] = useState('');
+    // const [location, setLocation] = useState('');
     const [building, setBuilding] = useState('');
+    const [floor, setFloor] = useState('');
     const [room, setRoom] = useState('');
-    const [equipment, setEquipment] = useState('');
+    // const [equipment, setEquipment] = useState('');
     const [note, setNote] = useState('');
 
-    const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setLocation(prev => name === 'building' ? `${value} ${prev.split(' ')[1] || ''}` : `${prev.split(' ')[0] || ''} ${value}`);
-    };
+    // const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+    //     const { name, value } = e.target;
+    //     setLocation(prev => name === 'building' ? `${value} ${prev.split(' ')[1] || ''}` : `${prev.split(' ')[0] || ''} ${value}`);
+    // };
 
     const handleBuildingChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
         const { value } = e.target;
         setBuilding(value);
     };
 
+    const handleFloorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
+        setFloor(value);
+    };
+    
     const handleRoomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         setRoom(value);
-    }
-
-    const handleEquipmentChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
-        const { value } = e.target;
-        setEquipment(value);
     };
+
+    // const handleEquipmentChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+    //     const { value } = e.target;
+    //     setEquipment(value);
+    // };
 
     const handleNoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target;
         setNote(value);
-    }
+    };
 
     const handleCancel = () => {
         // setLocation('');
         setBuilding('');
         setRoom('');
-        setEquipment('');
+        setFloor('');
+        // setEquipment('');
         setNote('');
-        // TODO: Reset form fields here
-
     };
 
     const handleSubmit = () => {
@@ -65,13 +70,20 @@ function CreateReport() {
                     <input 
                         className="form-control ml-2"
                         type="text"
+                        name="floor"
+                        placeholder="Tầng"
+                        value = {floor || ''}
+                        onChange={handleFloorChange} />
+                    <input 
+                        className="form-control ml-2"
+                        type="text"
                         name="room"
                         placeholder="Phòng"
                         value = {room || ''}
                         onChange={handleRoomChange} />
                 </div>
             </div>
-            <div className="mb-3 form-group">
+            {/* <div className="mb-3 form-group">
                 <label>Loại sự cố: </label>
                 <select className="mt-2 form-control" value={equipment || ''} onChange={handleEquipmentChange}>
                     <option value="" selected disabled>Chọn loại sự cố</option>
@@ -83,7 +95,7 @@ function CreateReport() {
                     <option value="electricals">Hệ thống điện</option>
                     <option value="infrastructures">Cơ sở hạ tầng (tường nhà, trần nhà, ...)</option>
                 </select>
-            </div>
+            </div> */}
             <div className="mb-4 form-group">
                 <label>Ghi chú: </label>
                 <textarea
