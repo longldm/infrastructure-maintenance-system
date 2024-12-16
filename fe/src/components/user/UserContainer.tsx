@@ -19,12 +19,12 @@ function UserContainer() {
                         >
                             Tạo báo cáo sự cố
                         </button>
-                        <button
+                        {/* <button
                             className={`btn w-100 mb-2 ${activeSection === 'section2' ? 'btn-primary' : 'btn-outline-primary'}`}
                             onClick={() => setActiveSection('section2')}
                         >
                             Đánh giá xử lý sự cố
-                        </button>
+                        </button> */}
                     </div>
 
                     {/* Content Area */}
@@ -36,12 +36,12 @@ function UserContainer() {
                             </div>
                         )}
                         
-                        {activeSection === 'section2' && (
+                        {/* {activeSection === 'section2' && (
                             <div>
                                 <h3>Đánh giá xử lý sự cố</h3>
                                 <RateReport />
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
             </div>
