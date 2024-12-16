@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class SupervisorRatingResponse {
-    private String supervisorId;   // The supervisor's ID
+    private String fullName;   // The supervisor's ID
     private Double averageRating;  // The average rating of the supervisor's handled reports
 }

@@ -281,14 +281,16 @@ public class ReportService {
         // Process the raw data into a list of SupervisorRatingResponse
         List<SupervisorRatingResponse> supervisorRatings = rawResults.stream()
                 .map(result -> new SupervisorRatingResponse(
-                        (String) result[0], // Supervisor ID
-                        (Double) result[1]   // Average rating (no need to check for null, handled by the query)
+                        (String) result[0], // Supervisor full name
+                        (Double) result[1]  // Average rating
                 ))
                 .collect(Collectors.toList());
 
         // Return the result wrapped in the response DTO
         return new ReportsAverageRatingResponse(supervisorRatings);
     }
+
+
 
 
     public ReportsProcessedBySupervisorResponse getReportCountBySupervisorAndMonth(int year) {
