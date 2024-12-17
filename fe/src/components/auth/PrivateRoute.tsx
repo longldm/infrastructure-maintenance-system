@@ -1,20 +1,13 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { USER_ROLE } from '../../constants/role';
-import { useEffect } from 'react';
-import { getUserInfo } from './loginApi';
 
 function PrivateRoute() {
-    const dispatch = useAppDispatch()
     const isAuthenticated = useAppSelector(store => store.auth.isAuthenticated);
     const currentUser = useAppSelector(store => store.auth.currentUser);
-    
-    useEffect(() => {
-        dispatch(getUserInfo())
-    }, [dispatch])
 
     const location = useLocation();
-    if (isAuthenticated) {
+    if (isAuthenticated && currentUser) {
         // system admin
         if (currentUser.role.id && (currentUser.role.id === USER_ROLE.USER_ROLE_SYSTEM_ADMIN) && location.pathname !== "/admin") {
             return <Navigate to="/403" state={location} />;
@@ -34,8 +27,8 @@ function PrivateRoute() {
         return (<Outlet />);
     }
     else {
-        // return (<Navigate to="/login" state={location} />);
-        return (<Outlet />);
+        return (<Navigate to="/login" state={location} />);
+        // return (<Outlet />);
     }
 
 }

@@ -18,7 +18,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 function Statistic() {
     const dispatch = useAppDispatch();
     const reportsResolvedByMonth = useAppSelector(store => store.statistic.reportByMonth);
-    const ratingBySupervisor = useAppSelector(store => store.statistic.ratingBySupervisor);
+    // const ratingBySupervisor = useAppSelector(store => store.statistic.ratingBySupervisor);
 
     const [statisticOption, setStatisticOption] = useState<number>(1);
     const [year, setYear] = useState<number>(2023);
@@ -47,18 +47,18 @@ function Statistic() {
     };
 
     // Bar Chart Data for Average Ratings
-    const barChartDataRatings = {
-        labels: ratingBySupervisor.supervisorRatings.map(rating => `Supervisor ${rating.supervisorId}`),
-        datasets: [
-            {
-                label: "Average Ratings (1-5 Scale)",
-                data: ratingBySupervisor.supervisorRatings.map(rating => rating.rating),
-                backgroundColor: "rgba(255, 99, 132, 0.5)",
-                borderColor: "rgba(255, 99, 132, 1)",
-                borderWidth: 1,
-            },
-        ],
-    };
+    // const barChartDataRatings = {
+    //     labels: ratingBySupervisor.supervisorRatings.map(rating => `Supervisor ${rating.supervisorId}`),
+    //     datasets: [
+    //         {
+    //             label: "Average Ratings (1-5 Scale)",
+    //             data: ratingBySupervisor.supervisorRatings.map(rating => rating.rating),
+    //             backgroundColor: "rgba(255, 99, 132, 0.5)",
+    //             borderColor: "rgba(255, 99, 132, 1)",
+    //             borderWidth: 1,
+    //         },
+    //     ],
+    // };
 
     // Bar Chart Options
     const barChartOptions = {
@@ -77,7 +77,7 @@ function Statistic() {
 
     return (
         <div style={{ height: "100%", width: "100%" }}>
-            <select
+            {/* <select
                 className="form-select"
                 onChange={(e) => {
                     setStatisticOption(Number(e.target.value));
@@ -86,7 +86,8 @@ function Statistic() {
             >
                 <option value={1}>Số lượng báo cáo xử lý theo tháng</option>
                 <option value={2}>Đánh giá trung bình</option>
-            </select>
+            </select> */}
+            <div>Số lượng báo cáo xử lý theo tháng</div>
 
             {statisticOption === 1 && (
                 <div className="mt-2" >
@@ -108,13 +109,13 @@ function Statistic() {
                 </div>
             )}
 
-            {statisticOption === 2 && (
+            {/* {statisticOption === 2 && (
                 <div className="mt-2">
                     <div className="mt-3" style={{ height: "50vh" }}>
                         <Bar data={barChartDataRatings} options={barChartOptions} />
                     </div>
                 </div>
-            )}
+            )} */}
         </div>
     );
 }

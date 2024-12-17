@@ -14,12 +14,12 @@ import { ReactNotifications } from 'react-notifications-component';
 function App() {
   return (
     <>
-     <ReactNotifications />
+      <ReactNotifications />
       <BrowserRouter>
         <Routes>
           <Route element={<ThemeLoader />}>
-            <Route path="/login" element={<Login />} />
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
             <Route element={<PrivateRoute />}>
               <Route element={<BaseLayout />}>
                 <Route path="/user" element={<UserContainer />} />
