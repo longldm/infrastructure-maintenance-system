@@ -48,6 +48,9 @@ public class ReportService {
                         lectureHallRepository.save(request.getLectureHall())
                 );
         Report report = reportMapper.toReport(request);
+        report.setFeedbackRatings(0);
+        report.setCreatedAt(LocalDateTime.now());
+        report.setUpdatedAt(LocalDateTime.now());
         report.setAccount(user);
         report.setLectureHall(lectureHall);
 
@@ -219,16 +222,16 @@ public class ReportService {
         );
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")  // Ensure only Admin or Manager can access this
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'REPORTER', 'SUPERVISOR')")  // Ensure only Admin or Manager can access this
     public List<ReportResponse> getAllReports(String accountId) {
         // Fetch the user by accountId to validate the role
         User user = userRepository.findById(accountId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        // Check if the user has the required role (ADMIN or MANAGER)
-        if (!userHasValidRole(user)) {
-            throw new AppException(ErrorCode.UNAUTHORIZED_USER);  // Or ErrorCode.FORBIDDEN depending on your choice
-        }
+//        // Check if the user has the required role (ADMIN or MANAGER)
+//        if (!userHasValidRole(user)) {
+//            throw new AppException(ErrorCode.UNAUTHORIZED_USER);  // Or ErrorCode.FORBIDDEN depending on your choice
+//        }
 
         // Fetch all reports from the database
         List<Report> reports = reportRepository.findAll();
