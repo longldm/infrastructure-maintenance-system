@@ -19,7 +19,7 @@ export const createAccount = createAsyncThunk<ICreateAccountResponse, ICreateAcc
     'api/create-account',
     async (payload: ICreateAccountPayload, thunkApi) => {
         return await sendRequest(
-            "/accounts",
+            "/users",
             {
                 payload: payload,
                 method: "POST",

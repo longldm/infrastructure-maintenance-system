@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ManageAccount.css'; // Import the CSS file for custom styles
+import { IAccount, ICreateAccountPayload, IRole } from '../../../types/Account';
+import { useAppDispatch } from '../../../app/hooks';
+import { createAccount } from './manageAccountApi';
 
 interface Account {
   id: number;
@@ -27,20 +30,20 @@ const roleOptions: { [key: string]: string } = {
 };
 
 function ManageAccount() {
-  const [accounts, setAccounts] = useState<Account[]>(initialAccounts);
+  const dispatch = useAppDispatch()
+  const [accounts, setAccounts] = useState<IAccount[]>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [dob, setDob] = useState('');
   const [role, setRole] = useState('REPORTER');
-  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+  const [selectedAccount, setSelectedAccount] = useState<IAccount | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
   const handleAddAccount = () => {
-    const newAccount: Account = {
-      id: accounts.length + 1,
+    const newAccount: ICreateAccountPayload = {
       username,
       password,
       firstName,
@@ -48,7 +51,8 @@ function ManageAccount() {
       dob,
       role,
     };
-    setAccounts([...accounts, newAccount]);
+    dispatch(createAccount(newAccount))
+    // setAccounts([...accounts, newAccount]);
     setUsername('');
     setPassword('');
     setFirstName('');
@@ -58,7 +62,7 @@ function ManageAccount() {
   };
 
   const handleRowClick = (account: Account) => {
-    setSelectedAccount(account);
+    // setSelectedAccount(account);
     setUsername(account.username);
     setPassword(account.password);
     setFirstName(account.firstName);
@@ -69,12 +73,12 @@ function ManageAccount() {
 
   const handleSaveChanges = () => {
     if (selectedAccount) {
-      const updatedAccounts = accounts.map((account) =>
-        account.id === selectedAccount.id
-          ? { ...account, username, password, firstName, lastName, dob, role }
-          : account
-      );
-      setAccounts(updatedAccounts);
+      // const updatedAccounts = accounts.map((account) =>
+      //   account.id === selectedAccount.id
+      //     ? { ...account, username, password, firstName, lastName, dob, role }
+      //     : account
+      // );
+      // setAccounts(updatedAccounts);
       setSelectedAccount(null);
       setUsername('');
       setPassword('');
@@ -87,7 +91,7 @@ function ManageAccount() {
 
   const handleDeleteAccount = () => {
     if (selectedAccount) {
-      setAccounts(accounts.filter(account => account.id !== selectedAccount.id));
+      // setAccounts(accounts.filter(account => account.id !== selectedAccount.id));
       setSelectedAccount(null);
       setUsername('');
       setPassword('');
@@ -104,8 +108,8 @@ function ManageAccount() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = accounts.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(accounts.length / itemsPerPage);
+  // const currentItems = accounts.slice(indexOfFirstItem, indexOfLastItem);
+  // const totalPages = Math.ceil(accounts.length / itemsPerPage);
 
   return (
     <div className="container mt-4">
@@ -196,7 +200,7 @@ function ManageAccount() {
                   <th>Vai trò</th>
                 </tr>
               </thead>
-              <tbody>
+              {/* <tbody>
                 {currentItems.map((account) => (
                   <tr key={account.id} onClick={() => handleRowClick(account)} data-bs-toggle="modal" data-bs-target="#editAccountModal">
                     <td>{account.id}</td>
@@ -208,20 +212,20 @@ function ManageAccount() {
                     <td className="text-truncate" title={roleOptions[account.role]}>{roleOptions[account.role]}</td>
                   </tr>
                 ))}
-              </tbody>
+              </tbody> */}
             </table>
           </div>
-          <nav className="fixed-bottom">
-            <ul className="pagination justify-content-center">
-              {Array.from({ length: totalPages }, (_, index) => (
-                <li key={index + 1} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                  <button className="page-link" onClick={() => handlePageChange(index + 1)}>
-                    {index + 1}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
+            {/* <nav className="fixed-bottom">
+              <ul className="pagination justify-content-center">
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <li key={index + 1} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                    <button className="page-link" onClick={() => handlePageChange(index + 1)}>
+                      {index + 1}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav> */}
         </div>
       </div>
 
