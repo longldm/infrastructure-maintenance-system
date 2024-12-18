@@ -107,14 +107,42 @@ export interface IGetAverageRatingResponse {
 }
 
 export interface ICreateReportPayload {
-  reporterId: string;
-  location: string;
-  equipment: string;
-  note: string;
+  reporterId: string,
+  lectureHall: {
+    id: number
+    building: string,
+    floor: string,
+    room: string
+  },
+  details: string,
+  priority: string,
+  critical: true,
+  stage: string  // OPEN - IN_PROGRESS - RESOLVED
 }
 
 export interface ICreateReportResponse {
   code: number;
-  message: string;
-  result: IReportItem;
+  // message: string;
+  result: IReportResponse;
+}
+
+export interface ILectureHall {
+  lectureHall: {
+    id: number;
+    building: string;
+    floor: string;
+    room: string;
+  }
+}
+
+export interface ILectureHallResponse {
+  code: number;
+  result: ILectureHall[];
+}
+
+export interface IUsingLectureHall {
+  id: number;
+    building: string;
+    floor: string;
+    room: string;
 }

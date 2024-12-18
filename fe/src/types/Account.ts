@@ -1,11 +1,11 @@
 export interface IAccount {
     id: number;
     username: string;
-    password: string;
+    // password: string;
     firstName: string;
     lastName: string;
     dob: string;
-    role: string;
+    role: IRole;
 }
 
 export interface ICreateAccountPayload {
@@ -19,7 +19,7 @@ export interface ICreateAccountPayload {
 
 export interface ICreateAccountResponse {
     code: number;
-    message: string;
+    // message: string;
     result: IAccount;
 }
 
@@ -46,4 +46,10 @@ export interface IDeleteAccountPayload {
 export interface IDeleteAccountResponse {
     code: number;
     message: string;
+}
+
+export interface IRole {
+    name: string
+    description: string
+    permissions: string[]
 }
