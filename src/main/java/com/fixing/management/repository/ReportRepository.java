@@ -24,11 +24,13 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
             "ORDER BY month")
     List<Object[]> getResolvedReportsByMonth(@Param("year") int year);
 
-    @Query("SELECT r.assignedAccountId.id, COALESCE(AVG(r.feedbackRatings), 0) " +
+    @Query("SELECT CONCAT(u.firstName, ' ', u.lastName) AS fullName, AVG(r.feedbackRatings) " +
             "FROM Report r " +
-            "WHERE r.stage = 'resolved' AND r.assignedAccountId IS NOT NULL " +
-            "GROUP BY r.assignedAccountId.id")
+            "JOIN r.assignedAccountId u " +
+            "WHERE r.stage = 'resolved' AND r.feedbackRatings IS NOT NULL " +
+            "GROUP BY u.firstName, u.lastName")
     List<Object[]> getAverageRatingBySupervisor();
+
 
     @Query("SELECT r.assignedAccountId.id, FUNCTION('MONTHNAME', r.updatedAt) AS monthName, COUNT(r.id) AS reportCount, FUNCTION('MONTH', r.updatedAt) AS month " +
             "FROM Report r " +
