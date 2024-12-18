@@ -1,13 +1,29 @@
-import { IReportItem } from "../../../types/Report";
-import React, { useState } from 'react';
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { ICreateReportPayload, IReportItem } from "../../../types/Report";
+import React, { useEffect, useState } from 'react';
+import { createReport } from "./createReportApi";
 
 function CreateReport() {
+    const dispatch = useAppDispatch()
+    const currentUser = useAppSelector(state => state.auth.currentUser); 
+    const lectureHallList = useAppSelector(state => state.reporter.lectureHallList);
+
     // const [location, setLocation] = useState('');
     const [building, setBuilding] = useState('');
     const [floor, setFloor] = useState('');
     const [room, setRoom] = useState('');
     // const [equipment, setEquipment] = useState('');
     const [note, setNote] = useState('');
+    const [roomList, setRoomList] = useState<string[]>([]);
+    const [floorList, setFloorList] = useState<string[]>([]);
+    const [buildingList, setBuildingList] = useState<string[]>([]);
+
+    useEffect(() => {
+        setBuildingList(lectureHallList.map((item) => item.lectureHall.building));
+        setFloorList(lectureHallList.map((item) => item.lectureHall.floor));
+        setRoomList(lectureHallList.map((item) => item.lectureHall.room));
+    }, [lectureHallList])
+    
 
     // const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     //     const { name, value } = e.target;
@@ -49,25 +65,59 @@ function CreateReport() {
     };
 
     const handleSubmit = () => {
-        // TODO: Handle report submission logic here
-    };
+        // Ask the user for confirmation
+        const chosenLecturalHallId = lectureHallList.find((item) => item.lectureHall.building === building && item.lectureHall.floor === floor && item.lectureHall.room === room)?.lectureHall.id; 
+        if (!chosenLecturalHallId) {
+            return;
+        }
+        const userConfirmed = window.confirm("Are you sure you want to submit this report?");
+        if (userConfirmed) {
+            // Proceed with report submission
+            const payload: ICreateReportPayload = {
+                reporterId: currentUser.id,
+                lectureHall: {
+                    id: chosenLecturalHallId,
+                    building: building,
+                    floor: floor,
+                    room: room
+                },
+                details: note,
+                priority: 'Low',
+                critical: true,
+                stage: 'OPEN'
+            };
+    
+            dispatch(createReport(payload));
+            alert("Report submitted successfully!");
+        } else {
+            alert("Report submission canceled.");
+        }
+    };    
 
     return (
         <div className="container mt-4">
             <div className="mb-3 form-group">
                 <label>Địa điểm: </label>
                 <div className="mt-2 d-flex">
-                    <select className="form-control mr-2" name="building" value = {building || ''} onChange={handleBuildingChange}>
+                    <select className="form-control mr-2" name="building" value = {building || ''} onChange={(e) => setBuilding(e.target.value)}>
                         <option value="" selected disabled>Tòa nhà</option>
-                        <option value="D3">D3</option>
-                        <option value="D3-5">D3-5</option>
-                        <option value="D5">D5</option>
-                        <option value="D6">D6</option>
-                        <option value="D7">D7</option>
-                        <option value="D8">D8</option>
-                        <option value="D9">D9</option>
+                        {buildingList.map((building, index) => (
+                            <option key={index} value={building}>{building}</option>
+                        ))}
                     </select>
-                    <input 
+                    <select className="form-control mr-2" name="building" value = {floor || ''} onChange={(e) => setFloor(e.target.value)}>
+                        <option value="" selected disabled>Tòa nhà</option>
+                        {floorList.map((floor, index) => (
+                            <option key={index} value={floor}>{floor}</option>
+                        ))}
+                    </select>
+                    <select className="form-control mr-2" name="building" value = {room || ''} onChange={(e) => setRoom(e.target.value)}>
+                        <option value="" selected disabled>Tòa nhà</option>
+                        {roomList.map((room, index) => (
+                            <option key={index} value={room}>{room}</option>
+                        ))}
+                    </select>
+                    {/* <input 
                         className="form-control ml-2"
                         type="text"
                         name="floor"
@@ -80,7 +130,7 @@ function CreateReport() {
                         name="room"
                         placeholder="Phòng"
                         value = {room || ''}
-                        onChange={handleRoomChange} />
+                        onChange={handleRoomChange} /> */}
                 </div>
             </div>
             {/* <div className="mb-3 form-group">
@@ -129,7 +179,7 @@ function CreateReport() {
                     </div>
                 </div>
                 {/* Nút tạo báo cáo */}
-                <button className="btn btn-primary ml-2" data-bs-toggle="modal" data-bs-target="#createReportModal" style={{ marginLeft: '5px' }}>Tạo báo cáo</button>
+                <button onClick={handleSubmit} className="btn btn-primary ml-2" data-bs-toggle="modal" data-bs-target="#createReportModal" style={{ marginLeft: '5px' }}>Tạo báo cáo</button>
                 {/* Modal xác nhận tạo báo cáo */}
                 <div className="modal fade" id="createReportModal" tabIndex={-1} role="dialog" aria-labelledby="createReportModalLabel" aria-hidden="true">
                     <div className="modal-dialog" role="document">
