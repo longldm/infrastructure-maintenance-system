@@ -15,12 +15,12 @@ interface Account {
   role: string;
 }
 
-const initialAccounts: Account[] = [
-  { id: 1, username: 'admin', password: 'admin123', firstName: 'Admin', lastName: 'User', dob: '1990-01-01', role: 'ADMIN' },
-  { id: 2, username: 'user1', password: 'user123', firstName: 'User', lastName: 'One', dob: '1995-02-02', role: 'REPORTER' },
-  { id: 3, username: 'supervisor1', password: 'duong2002', firstName: 'Duong', lastName: 'Pham Thai', dob: '2002-05-08', role: 'SUPERVISOR' },
-  // Add more accounts as needed
-];
+// const initialAccounts: Account[] = [
+//   { id: 1, username: 'admin', password: 'admin123', firstName: 'Admin', lastName: 'User', dob: '1990-01-01', role: 'ADMIN' },
+//   { id: 2, username: 'user1', password: 'user123', firstName: 'User', lastName: 'One', dob: '1995-02-02', role: 'REPORTER' },
+//   { id: 3, username: 'supervisor1', password: 'duong2002', firstName: 'Duong', lastName: 'Pham Thai', dob: '2002-05-08', role: 'SUPERVISOR' },
+//   // Add more accounts as needed
+// ];
 
 const roleOptions: { [key: string]: string } = {
   REPORTER: "Người báo cáo sự cố",
