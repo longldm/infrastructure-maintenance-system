@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IReportItem } from '../../../types/Report';
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { getUserInfo } from '../../auth/loginApi';
 
 
 
@@ -33,6 +34,7 @@ function RateReport() {
   const reportsPerPage = 10;
   const [myReportedList, setMyReportedList] = useState<IReportItem[]>([]);
 
+
   useEffect(() => {
     setMyReportedList(reportedList.filter(report => report.reporterId === currentUser.id));
   }, [ reportedList ]);
@@ -45,6 +47,18 @@ function RateReport() {
     setSelectedReport(null);
   };
 
+  const getCurrentStatus = (status: string) => {
+    switch (status) {
+      case 'OPEN':
+        return 'Chờ xử lý';
+      case 'IN_PROGRESS':
+        return 'Đang xử lý';
+      case 'RESOLVED':
+        return 'Đã xử lý';
+      default:
+        return '';
+    }
+  }
   // const handleReportClick = (report: IReportItem) => {
   //   setSelectedReport(report);
   //   setRatings(report.ratings);
@@ -145,7 +159,7 @@ function RateReport() {
                     {item.assigneeId === '' ? 'Chưa phân công' : getSupervisorName(item.assigneeId)}
                   </td> */}
                   <td>{item.time}</td>
-                  <td>{item.status}</td>
+                  <td>{getCurrentStatus(item.status)}</td>
                 </tr>
               ))
             ) : (
@@ -199,7 +213,8 @@ function RateReport() {
                 {/* <p><strong>Người phụ trách:</strong> {selectedReport.assignee}</p> */}
                 <p><strong>Ghi chú:</strong> {selectedReport.note}</p>
                 <p><strong>Thời gian:</strong> {selectedReport.time}</p>
-                <p><strong>Trạng thái xử lý:</strong> {selectedReport.status}</p>
+                <p><strong>Trạng thái xử lý:</strong>{selectedReport.status}</p>
+
                 {/* <p><strong>Đánh giá:</strong> {ratings !== null ? ratings : 'No rating'}</p> */}
                 {/* <button className="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#rateReportModal">Đánh giá</button> */}
                 {/* Modal đánh giá báo cáo */}

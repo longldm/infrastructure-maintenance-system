@@ -20,7 +20,7 @@ function UserContainer() {
         dispatch(getUserInfo())
         dispatch(getLectureHallList())
         dispatch(getAllReport(payload))
-    }, [])
+    }, [currentUserId])
 
     useLayoutEffect(() => {
         if (currentUser && currentUser.id !== currentUserId) {
