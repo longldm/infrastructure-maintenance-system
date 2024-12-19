@@ -48,6 +48,8 @@ public class ReportService {
                         lectureHallRepository.save(request.getLectureHall())
                 );
         Report report = reportMapper.toReport(request);
+        report.setCreatedBy(user.getUsername());
+        report.setCreatedLog(user.getUsername());
         report.setFeedbackRatings(0);
         report.setCreatedAt(LocalDateTime.now());
         report.setUpdatedAt(LocalDateTime.now());
@@ -328,10 +330,14 @@ public class ReportService {
     }
 
 
-
-
-
-
+    public List<LectureHallResponse> getAllLectureHall() {
+        List<LectureHall> lst = lectureHallRepository.findAll();
+        List<LectureHallResponse> lectureHallResponses = new ArrayList<>();
+        for (LectureHall lectureHall : lst) {
+            lectureHallResponses.add(new LectureHallResponse(lectureHall));
+        }
+        return lectureHallResponses;
+    }
 }
 
 
