@@ -43,3 +43,4 @@ export const assignJobRequest = createAsyncThunk<IAssignJobResponse, IAssignJobP
         );
     }
 )
+

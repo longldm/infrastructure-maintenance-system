@@ -32,13 +32,18 @@ function Statistic() {
         dispatch(getAverageRatingBySupervisor());
     }, [dispatch]);
 
-    // Bar Chart Data for Reports Resolved by Month
     const barChartDataReports = {
-        labels: Object.keys(reportsResolvedByMonth.monthlyReportCounts), // Months
+        labels: [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ],
         datasets: [
             {
                 label: `Reports Resolved (${year})`,
-                data: Object.values(reportsResolvedByMonth.monthlyReportCounts), // Monthly report counts
+                data: [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ].map((month) => (reportsResolvedByMonth.monthlyReportCounts as Record<string, number>)[month] || 0),
                 backgroundColor: "rgba(75, 192, 192, 0.5)",
                 borderColor: "rgba(75, 192, 192, 1)",
                 borderWidth: 1,

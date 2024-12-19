@@ -112,7 +112,7 @@ function ManagerReport() {
           Chờ xử lý
         </button>
         <button
-          className={`btn ${activeSection === 'delayed' ? 'btn-primary' : 'btn-outline-primary'}`}
+          className={`btn ${activeSection === 'ongoing' ? 'btn-primary' : 'btn-outline-primary'}`}
           onClick={() => setActiveSection('ongoing')}
         >
           Đang xử lý
@@ -230,7 +230,7 @@ function ManagerReport() {
                 <button type="button" className="btn btn-secondary" onClick={closeModal}>
                   Close
                 </button>
-                {selectedItem.status !== 'Processed' && (
+                {selectedItem.status !== 'RESOLVED' && (
                   <button
                     type="button"
                     className="btn btn-primary"

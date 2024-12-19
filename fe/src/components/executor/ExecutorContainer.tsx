@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { IGetALlReportPayload, IReportItem, IUpdateStagePayload } from "../../types/Report";
 import { getReportForExecutor, updateReport } from "./executorApi";
 import { getUserInfo } from "../auth/loginApi";
+import { report } from "process";
 
 const ExecutorContainer = () => {
   const dispatch = useAppDispatch()
@@ -18,6 +19,12 @@ const ExecutorContainer = () => {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const tasksPerPage = 10;
+  const [currentExecutorReportList, setCurrentExecutorReportList] = useState<IReportItem[]>([]);
+
+
+  useEffect(() => {
+    setCurrentExecutorReportList(reportList.filter(report => report.assigneeId === currentUserId))
+  },[reportList])
 
   useEffect(() => {
     dispatch(getUserInfo())
@@ -67,7 +74,7 @@ const ExecutorContainer = () => {
     });
   };
 
-  const filteredTasks = sortedTasks(reportList.filter((report) => report.status === activeState));
+  const filteredTasks = sortedTasks(currentExecutorReportList.filter((report) => report.status === activeState));
   const totalTasks = filteredTasks.length;
   const totalPages = Math.ceil(totalTasks / tasksPerPage);
   const currentTasks = filteredTasks.slice((currentPage - 1) * tasksPerPage, currentPage * tasksPerPage);
@@ -86,7 +93,7 @@ const ExecutorContainer = () => {
 
   return (
     <div className="container mt-4">
-      <h2>Executor Task Management</h2>
+      <h2>Quản lý công việc</h2>
 
       {/* Tabs for State */}
       <div className="btn-group mb-3">
