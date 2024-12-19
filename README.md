@@ -35,6 +35,9 @@ Group 2's distibuted system repo
      git checkout fe
      ```
 
+4. **Di chuyển vào thư mục fe:**
+   - cd /fe/
+
 3. **Cài đặt các thư viện cần thiết:**  
    - Nếu sử dụng `npm`:  
      ```bash
