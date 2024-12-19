@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IAccount, ICreateAccountPayload, ICreateAccountResponse, IUpdateAccountPayload, IUpdateAccountResponse, IDeleteAccountPayload, IDeleteAccountResponse } from "../../../types/Account";
 import { sendRequest } from "../../../utils/sendRequest";
+import { IGetAllUsersResponse } from "../../../types/User";
 
 export const getAllAccounts = createAsyncThunk<IAccount[]>(
     'api/get-all-accounts',
@@ -50,6 +51,19 @@ export const deleteAccount = createAsyncThunk<IDeleteAccountResponse, IDeleteAcc
             `/accounts/${payload.id}`,
             {
                 method: "DELETE",
+                thunkApi,
+            }
+        );
+    }
+);
+
+export const getAllUserForAdmin = createAsyncThunk<IGetAllUsersResponse>(
+    'api/get-all-user-for-admin',
+    async (thunkApi) => {
+        return await sendRequest(
+            "/users",
+            {
+                method: "GET",
                 thunkApi,
             }
         );

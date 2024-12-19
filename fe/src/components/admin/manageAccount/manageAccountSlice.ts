@@ -1,18 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IAccount } from "../../../types/Account";
-import { getAllAccounts, createAccount, updateAccount, deleteAccount } from "./manageAccountApi";
+import { getAllAccounts, createAccount, updateAccount, deleteAccount, getAllUserForAdmin } from "./manageAccountApi";
 import { showAlert } from "../../../utils/showAlert";
+import { IUser, IUserListResponse } from "../../../types/User";
 
 interface ManageAccountState {
     loading: boolean;
     error: string | null;
     accounts: IAccount[];
+    userList: IUserListResponse[];
 }
 
 const initialState: ManageAccountState = {
     loading: false,
     error: null,
     accounts: [],
+    userList: []
 };
 
 const manageAccountSlice = createSlice({
@@ -41,7 +44,7 @@ const manageAccountSlice = createSlice({
             .addCase(createAccount.fulfilled, (state, action) => {
                 state.loading = false;
                 state.accounts.push(action.payload.result);
-                showAlert("Account created successfully", "success");
+                showAlert("Thêm tài khoản mới thành công", "success");
             })
             .addCase(createAccount.rejected, (state, action) => {
                 state.loading = false;
@@ -78,7 +81,12 @@ const manageAccountSlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message || "Failed to delete account";
                 showAlert(state.error, "danger");
-            });
+            })
+            .addCase(getAllUserForAdmin.fulfilled, (state, action) => {
+                if (action.payload?.result) {
+                    state.userList = action.payload.result;
+                }
+            })
     }
 });
 

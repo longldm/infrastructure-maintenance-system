@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './ManageAccount.css'; // Import the CSS file for custom styles
 import { IAccount, ICreateAccountPayload, IRole } from '../../../types/Account';
-import { useAppDispatch } from '../../../app/hooks';
-import { createAccount } from './manageAccountApi';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { createAccount, getAllUserForAdmin } from './manageAccountApi';
 
 interface Account {
   id: number;
@@ -31,6 +32,7 @@ const roleOptions: { [key: string]: string } = {
 
 function ManageAccount() {
   const dispatch = useAppDispatch()
+  const userList = useAppSelector(store => store.manageAccount.userList)
   const [accounts, setAccounts] = useState<IAccount[]>();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -41,6 +43,11 @@ function ManageAccount() {
   const [selectedAccount, setSelectedAccount] = useState<IAccount | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+
+
+  useEffect(() => {
+    dispatch(getAllUserForAdmin())
+  },[]);
 
   const handleAddAccount = () => {
     const newAccount: ICreateAccountPayload = {
@@ -106,10 +113,29 @@ function ManageAccount() {
     setCurrentPage(pageNumber);
   };
 
+  const getCurrentRole = (status: string) => {
+    console.log(status)
+      if (status === 'MANAGER') {
+        return 'Quản lý';
+      } else if (status === 'ADMIN') {
+        return 'Quản trị viên';
+      } else if (status === 'SUPERVISOR') {
+        return 'Người phụ trách';
+      } else if (status === 'REPORTER') {
+        return 'Người báo cáo';
+      } else {
+        return '';
+      }
+  }
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   // const currentItems = accounts.slice(indexOfFirstItem, indexOfLastItem);
   // const totalPages = Math.ceil(accounts.length / itemsPerPage);
+
+  // function log() {
+  //   console.log("button clicked")
+  // }
 
   return (
     <div className="container mt-4">
@@ -118,13 +144,13 @@ function ManageAccount() {
           <button className="nav-link active" id="add-account-tab" data-bs-toggle="tab" data-bs-target="#add-account" type="button" role="tab" aria-controls="add-account" aria-selected="true">Thêm tài khoản</button>
         </li>
         <li className="nav-item" role="presentation">
-          <button className="nav-link" id="manage-accounts-tab" data-bs-toggle="tab" data-bs-target="#manage-accounts" type="button" role="tab" aria-controls="manage-accounts" aria-selected="false">Quản lý tài khoản</button>
+          <button className="nav-link" id="manage-accounts-tab" data-bs-toggle="tab" data-bs-target="#manage-accounts" type="button" role="tab" aria-controls="manage-accounts" aria-selected="false">Xem danh sách tài khoản</button>
         </li>
       </ul>
       <div className="tab-content" id="myTabContent">
         <div className="tab-pane fade show active" id="add-account" role="tabpanel" aria-labelledby="add-account-tab">
-          <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
-            <div className="mb-3">
+          <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+            <div className="mb-3 mt-3">
               <label className="form-label">Tên đăng nhập</label>
               <input
                 type="text"
@@ -187,32 +213,36 @@ function ManageAccount() {
           </div>
         </div>
         <div className="tab-pane fade" id="manage-accounts" role="tabpanel" aria-labelledby="manage-accounts-tab">
-          <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
-            <table className="table table-bordered">
-              <thead>
+          <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+            <table className="table table-bordered mt-3">
+              <thead className="table-light">
                 <tr>
                   <th>ID</th>
-                  <th>Tên đăng nhập</th>
-                  <th>Mật khẩu</th>
                   <th>Tên</th>
                   <th>Họ</th>
                   <th>Ngày sinh</th>
                   <th>Vai trò</th>
                 </tr>
               </thead>
-              {/* <tbody>
-                {currentItems.map((account) => (
-                  <tr key={account.id} onClick={() => handleRowClick(account)} data-bs-toggle="modal" data-bs-target="#editAccountModal">
-                    <td>{account.id}</td>
-                    <td className="text-truncate" title={account.username}>{account.username}</td>
-                    <td className="text-truncate" title={account.password}>{account.password}</td>
-                    <td className="text-truncate" title={account.firstName}>{account.firstName}</td>
-                    <td className="text-truncate" title={account.lastName}>{account.lastName}</td>
-                    <td className="text-truncate" title={account.dob}>{account.dob}</td>
-                    <td className="text-truncate" title={roleOptions[account.role]}>{roleOptions[account.role]}</td>
+              <tbody>  
+                {userList.length ? (
+                  userList.map((item) => (
+                    <tr>
+                      <td>{item.username}</td>
+                      <td>{item.firstName}</td>
+                      <td>{item.lastName}</td>
+                      <td>{item.dob}</td>
+                      <td>{getCurrentRole(item.roles[0].name)}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={8} className="text-center">
+                      No data available
+                    </td>
                   </tr>
-                ))}
-              </tbody> */}
+                )}
+              </tbody>
             </table>
           </div>
             {/* <nav className="fixed-bottom">
@@ -304,6 +334,7 @@ function ManageAccount() {
           </div>
         </div>
       </div>
+    
     </div>
   );
 }
