@@ -5,6 +5,8 @@ import managerSlice from '../components/manager/manageReport/managerSlice';
 import executorSlice from '../components/executor/executorSlice';
 import statisticSlice from '../components/manager/statistic/statisticSlice';
 import createReportSlice from '../components/user/createReport/createReportSlice';
+import manageAccountSlice from '../components/admin/manageAccount/manageAccountSlice';
+
 
 
 export const store = configureStore({
@@ -15,6 +17,7 @@ export const store = configureStore({
     executor: executorSlice,
     statistic: statisticSlice,
     reporter: createReportSlice,
+    manageAccount: manageAccountSlice,
   },
 });
 
